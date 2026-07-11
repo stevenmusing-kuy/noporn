@@ -4,16 +4,29 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Quit Tracker</title>
-    <link rel="icon" type="image/png" href="https://cdn-icons-png.flaticon.com/512/785/785116.png">
+    <!-- ================= รูป ICON ของคุณ ================= -->
+    <link rel="icon" type="image/png" href="https://img2.pic.in.th/Gemini_Generated_Image_dbwgq3dbwgq3dbwg.png">
+    <link rel="apple-touch-icon" href="https://img2.pic.in.th/Gemini_Generated_Image_dbwgq3dbwgq3dbwg.png">
+    
+    <!-- ================= ทำให้ดูเหมือนแอปพลิเคชันจริง (PWA) ================= -->
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="Quit Porn">
+
     <link href="https://fonts.googleapis.com/css2?family=Kanit:wght@400;600;700&display=swap" rel="stylesheet">
     <style>
+      /* ================= STYLE หลัก ================= */
       body { margin: 0; padding: 0; background-color: #121212; color: #ffffff; font-family: 'Kanit', sans-serif; -webkit-font-smoothing: antialiased; }
       .app-container { max-width: 480px; margin: 0 auto; padding: 20px; padding-bottom: 90px; }
+      
+      /* Header & Main Badge */
       .header-section { text-align: center; margin-top: 30px; }
       .flame-icon { font-size: 50px; margin-bottom: 10px; }
       .victory-title { font-size: 22px; font-weight: 700; margin-bottom: 15px; }
       .main-badge { background: linear-gradient(90deg, #00e676, #1de9b6); color: #000; padding: 10px 30px; border-radius: 30px; font-weight: 700; font-size: 18px; display: inline-block; box-shadow: 0 4px 15px rgba(0, 230, 118, 0.3); }
       .subtitle { color: #8e8e93; font-size: 14px; margin-top: 20px; line-height: 1.5; }
+
+      /* Live Timer Section */
       .section-header { font-size: 13px; font-weight: 600; color: #8e8e93; letter-spacing: 1px; margin: 30px 0 15px 0; display: flex; align-items: center; }
       .red-dot { width: 8px; height: 8px; background-color: #ff3b30; border-radius: 50%; margin-left: 8px; animation: pulse 1.5s infinite; }
       @keyframes pulse { 0% { opacity: 1; } 50% { opacity: 0.4; } 100% { opacity: 1; } }
@@ -21,57 +34,194 @@
       .time-box { background-color: #1c1c1e; border-radius: 12px; padding: 15px 10px; text-align: center; }
       .time-val { font-size: 24px; font-weight: 700; margin-bottom: 5px; }
       .time-label { font-size: 12px; color: #8e8e93; }
-      .progress-card { background-color: #1c1c1e; border-radius: 12px; padding: 15px; margin-bottom: 15px; }
+
+      /* Progress & Cards */
+      .progress-card, .card { background-color: #1c1c1e; border-radius: 12px; padding: 15px; margin-bottom: 15px; }
+      .card-title { font-size: 16px; font-weight: 600; margin-bottom: 10px; color: #fff; }
       .progress-text { display: flex; justify-content: space-between; font-size: 14px; margin-bottom: 10px; }
       .progress-bg { background-color: #333; height: 6px; border-radius: 3px; width: 100%; overflow: hidden; }
       .progress-fill { background-color: #00e676; height: 100%; width: 0%; transition: width 1s; }
+
+      /* Buttons */
       .reset-btn { background-color: #2c2c2e; color: #ff3b30; border: 1px solid #ff3b30; width: 100%; padding: 15px; border-radius: 12px; font-size: 16px; font-weight: 600; margin-top: 30px; cursor: pointer; transition: 0.2s; font-family: 'Kanit', sans-serif; }
       .reset-btn:active { background-color: #ff3b30; color: white; }
+      .action-btn { width: 100%; padding: 15px; border-radius: 12px; font-size: 16px; font-weight: 600; font-family: 'Kanit', sans-serif; cursor: pointer; margin-bottom: 15px; border: none; }
+      .btn-panic { background-color: #ff9800; color: #fff; }
+      .btn-log { background-color: #2c2c2e; color: #00e676; border: 1px solid #00e676; }
+
+      /* Tab Content Management */
+      .tab-content { display: none; }
+      .tab-content.active-tab { display: block; animation: fadeIn 0.3s ease-in-out; }
+      @keyframes fadeIn { from { opacity: 0; transform: translateY(5px); } to { opacity: 1; transform: translateY(0); } }
+
+      /* Bottom Nav */
+      .bottom-nav { position: fixed; bottom: 0; left: 0; right: 0; background-color: #1c1c1e; display: flex; justify-content: space-around; padding: 12px 0 25px 0; border-top: 1px solid #333; max-width: 480px; margin: 0 auto; z-index: 100; }
+      .nav-item { color: #8e8e93; text-align: center; font-size: 11px; cursor: pointer; flex: 1; }
+      .nav-item.active { color: #00e676; }
+      .nav-icon { font-size: 22px; display: block; margin-bottom: 4px; }
+      
       #loading { text-align: center; margin-top: 50px; color: #00e676; font-size: 18px; }
       #main-app { display: none; }
     </style>
   </head>
   <body>
+    
     <div class="app-container">
       <div id="loading">กำลังเชื่อมต่อฐานข้อมูล...</div>
 
       <div id="main-app">
-        <div class="header-section">
-          <div class="flame-icon">🔥</div>
-          <div class="victory-title">ระยะเวลาที่ทำได้ปัจจุบัน</div>
-          <div class="main-badge" id="badge-display">0 วินาที</div>
-          <div class="subtitle">รักษาสถิติไว้เพื่อฟื้นฟูตัวเองให้สมบูรณ์<br>คุณกำลังทำได้ดีมาก!</div>
+        <!-- ================= TAB 1: หน้าหลัก (Home) ================= -->
+        <div id="tab-home" class="tab-content active-tab">
+          <div class="header-section">
+            <div class="flame-icon">🔥</div>
+            <div class="victory-title">ระยะเวลาที่ทำได้ปัจจุบัน</div>
+            <div class="main-badge" id="badge-display">0 วินาที</div>
+            <div class="subtitle">รักษาสถิติไว้เพื่อฟื้นฟูตัวเองให้สมบูรณ์<br>คุณกำลังทำได้ดีมาก!</div>
+          </div>
+
+          <div class="section-header">เวลาปัจจุบัน <div class="red-dot"></div></div>
+          <div class="timer-grid">
+            <div class="time-box"><div class="time-val" id="t-year">0</div><div class="time-label">ปี</div></div>
+            <div class="time-box"><div class="time-val" id="t-month">0</div><div class="time-label">เดือน</div></div>
+            <div class="time-box"><div class="time-val" id="t-day">0</div><div class="time-label">วัน</div></div>
+            <div class="time-box"><div class="time-val" id="t-hour">0</div><div class="time-label">ชั่วโมง</div></div>
+            <div class="time-box"><div class="time-val" id="t-minute">0</div><div class="time-label">นาที</div></div>
+            <div class="time-box"><div class="time-val" id="t-second">0</div><div class="time-label">วินาที</div></div>
+          </div>
+
+          <div class="section-header">ความคืบหน้า (เป้าหมาย 24 ชั่วโมง)</div>
+          <div class="progress-card">
+            <div class="progress-text">
+              <span>✔️ พยายามไปให้ถึง 1 วัน</span>
+              <span id="progress-percent">0%</span>
+            </div>
+            <div class="progress-bg"><div class="progress-fill" id="progress-fill"></div></div>
+          </div>
+
+          <button class="reset-btn" id="reset-btn" onclick="confirmReset()">🚨 ฉันพลาดแล้ว (เริ่มนับใหม่)</button>
         </div>
 
-        <div class="section-header">เวลาปัจจุบัน <div class="red-dot"></div></div>
-        <div class="timer-grid">
-          <div class="time-box"><div class="time-val" id="t-year">0</div><div class="time-label">ปี</div></div>
-          <div class="time-box"><div class="time-val" id="t-month">0</div><div class="time-label">เดือน</div></div>
-          <div class="time-box"><div class="time-val" id="t-day">0</div><div class="time-label">วัน</div></div>
-          <div class="time-box"><div class="time-val" id="t-hour">0</div><div class="time-label">ชั่วโมง</div></div>
-          <div class="time-box"><div class="time-val" id="t-minute">0</div><div class="time-label">นาที</div></div>
-          <div class="time-box"><div class="time-val" id="t-second">0</div><div class="time-label">วินาที</div></div>
+        <!-- ================= TAB 2: เลิกสื่อลามก (Quit Porn) ================= -->
+        <div id="tab-quit" class="tab-content">
+          <div class="section-header" style="margin-top: 10px;">เมนูช่วยเหลือ (QUIT PORN)</div>
+          
+          <div class="card">
+            <div class="card-title">🚨 รับมือกับความอยาก (Urge Surfing)</div>
+            <p style="color: #8e8e93; font-size: 13px; margin-bottom: 15px;">ความอยากจะพุ่งสูงสุดแค่ 10-20 นาที กดปุ่มด้านล่างเพื่อเบี่ยงเบนความสนใจ</p>
+            <button class="action-btn btn-panic" onclick="alert('หายใจเข้าลึกๆ นับ 1-4...\nกลั้นหายใจ นับ 1-4...\nหายใจออกยาวๆ นับ 1-6...\n\nทำซ้ำ 5 รอบ คุณเก่งมากที่เลือกเปิดแอปนี้แทน!')">🧘‍♂️ ฝึกหายใจ 1 นาที</button>
+            <button class="action-btn" style="background-color: #1976d2; color: #fff;" onclick="window.open('https://www.youtube.com/results?search_query=motivation+speech')">🎧 ฟังคลิปสร้างแรงบันดาลใจ</button>
+          </div>
+
+          <div class="card">
+            <div class="card-title">📝 บันทึกประจำวัน (Daily Log)</div>
+            <select id="trigger-select" style="width: 100%; padding: 12px; border-radius: 8px; background: #2c2c2e; color: #fff; border: none; margin-bottom: 15px; font-family: 'Kanit';">
+              <option value="">-- วันนี้ตัวกระตุ้นคืออะไร? --</option>
+              <option value="เครียดจากงาน/เรียน">เครียดจากงาน/เรียน</option>
+              <option value="เหงา/เบื่อ">เหงา/เบื่อ</option>
+              <option value="นอนไม่หลับ/เล่นมือถือดึก">นอนไม่หลับ/เล่นมือถือดึก</option>
+              <option value="ไม่มี (วันนี้ควบคุมได้ดี)">ไม่มี (วันนี้ควบคุมได้ดี)</option>
+            </select>
+            <button class="action-btn btn-log" onclick="alert('บันทึกข้อมูลส่วนตัวของคุณเรียบร้อยแล้ว ก้าวต่อไปนะ!')">บันทึกข้อมูล</button>
+          </div>
         </div>
 
-        <div class="section-header">ความคืบหน้า (เป้าหมาย 24 ชั่วโมง)</div>
-        <div class="progress-card">
-          <div class="progress-text"><span>✔️ พยายามไปให้ถึง 1 วัน</span><span id="progress-percent">0%</span></div>
-          <div class="progress-bg"><div class="progress-fill" id="progress-fill"></div></div>
+        <!-- ================= TAB 3: การฟื้นฟู (Recovery) ================= -->
+        <div id="tab-recovery" class="tab-content">
+          <div class="section-header" style="margin-top: 10px;">สถานะการฟื้นฟู (RECOVERY)</div>
+          
+          <div class="card">
+            <div class="card-title">🧠 ระดับการฟื้นฟูทางสมองและร่างกาย</div>
+            <p style="color: #8e8e93; font-size: 13px; margin-bottom: 20px;">ร่างกายของคุณกำลังรักษาตัวเอง รักษาสถิติไว้เพื่อปลดล็อกขั้นต่อไป</p>
+            <div style="margin-bottom: 15px;">
+              <div style="display: flex; justify-content: space-between; font-size: 14px; margin-bottom: 5px;">
+                <span>🔋 พลังงานและความสดชื่น (เป้าหมาย 3 วัน)</span>
+              </div>
+              <div class="progress-bg"><div class="progress-fill" style="width: 30%; background-color: #29b6f6;"></div></div>
+            </div>
+            <div style="margin-bottom: 15px;">
+              <div style="display: flex; justify-content: space-between; font-size: 14px; margin-bottom: 5px;">
+                <span>👁️ ความมั่นใจและการสบตา (เป้าหมาย 7 วัน)</span>
+              </div>
+              <div class="progress-bg"><div class="progress-fill" style="width: 10%; background-color: #ab47bc;"></div></div>
+            </div>
+            <div style="margin-bottom: 15px;">
+              <div style="display: flex; justify-content: space-between; font-size: 14px; margin-bottom: 5px;">
+                <span>🧩 สมองปลอดโปร่ง โฟกัสดีขึ้น (เป้าหมาย 30 วัน)</span>
+              </div>
+              <div class="progress-bg"><div class="progress-fill" style="width: 2%; background-color: #ffa726;"></div></div>
+            </div>
+          </div>
+
+          <div class="card" style="text-align: center;">
+            <div class="card-title">🏆 เหรียญตราของคุณ</div>
+            <div style="font-size: 50px; margin: 10px 0;">🌱</div>
+            <div style="color: #00e676; font-weight: 600;">ระดับ: ผู้เริ่มต้น (Apprentice)</div>
+          </div>
         </div>
 
-        <button class="reset-btn" id="reset-btn" onclick="confirmReset()">🚨 ฉันพลาดแล้ว (เริ่มนับใหม่)</button>
+        <!-- ================= TAB 4: ตั้งค่า (Settings) ================= -->
+        <div id="tab-settings" class="tab-content">
+          <div class="section-header" style="margin-top: 10px;">การตั้งค่า (SETTINGS)</div>
+          
+          <div class="card">
+            <div class="card-title">🎯 ตั้งเป้าหมายของคุณ</div>
+            <p style="color: #8e8e93; font-size: 13px;">เป้าหมายที่เล็กลงช่วยให้สำเร็จง่ายขึ้น</p>
+            <select style="width: 100%; padding: 12px; border-radius: 8px; background: #2c2c2e; color: #fff; border: none; margin-bottom: 15px; font-family: 'Kanit';">
+              <option value="1">เป้าหมาย 1 วัน (24 ชั่วโมง)</option>
+              <option value="3">เป้าหมาย 3 วัน</option>
+              <option value="7">เป้าหมาย 1 สัปดาห์</option>
+              <option value="30">เป้าหมาย 1 เดือน</option>
+            </select>
+          </div>
+
+          <div class="card">
+            <div class="card-title">📊 ฐานข้อมูลและประวัติ</div>
+            <p style="color: #8e8e93; font-size: 13px; margin-bottom: 15px;">ดูประวัติการ Reset ทั้งหมดของคุณใน Google Sheets</p>
+            <button class="action-btn" style="background-color: #0f9d58; color: #fff;" onclick="window.open('https://docs.google.com/spreadsheets/d/1cVlf3U8de-X1wKYVcGMYpBHXT8cyy-OpqIa6VrgnOao/edit')">
+              🟢 เปิดตาราง Google Sheets
+            </button>
+          </div>
+        </div>
+
       </div>
     </div>
 
+    <!-- ================= BOTTOM NAVIGATION ================= -->
+    <div class="bottom-nav">
+      <div class="nav-item active" id="nav-home" onclick="switchTab('home')">
+        <span class="nav-icon">🏠</span>หน้าหลัก
+      </div>
+      <div class="nav-item" id="nav-quit" onclick="switchTab('quit')">
+        <span class="nav-icon">🛡️</span>เลิกดู
+      </div>
+      <div class="nav-item" id="nav-recovery" onclick="switchTab('recovery')">
+        <span class="nav-icon">💧</span>ฟื้นฟู
+      </div>
+      <div class="nav-item" id="nav-settings" onclick="switchTab('settings')">
+        <span class="nav-icon">⚙️</span>ตั้งค่า
+      </div>
+    </div>
+
+    <!-- ================= JAVASCRIPT ================= -->
     <script>
       // =======================================================================
-      // เอาลิงก์ยาวๆ จาก Google Apps Script ที่ลงท้ายด้วย /exec มาใส่ในบรรทัดด้านล่างนี้
+      // อย่าลืม! เอาลิงก์จาก Google Apps Script ที่ลงท้ายด้วย /exec มาใส่อีกครั้ง
       // =======================================================================
       const API_URL = "https://script.google.com/macros/s/AKfycbytiyuHUrYBeUfVdDl4xtOMkU9zaj3KgNhV3_A1cOnvwQlOiTxSq03f9zSAle8munbKYQ/exec"; 
       
       let startTime = 0;
       let timerInterval;
 
+      // ระบบเปลี่ยนหน้า (Tabs)
+      function switchTab(tabName) {
+        document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('active-tab'));
+        document.querySelectorAll('.nav-item').forEach(el => el.classList.remove('active'));
+        
+        document.getElementById('tab-' + tabName).classList.add('active-tab');
+        document.getElementById('nav-' + tabName).classList.add('active');
+      }
+
+      // โหลดข้อมูล
       fetch(API_URL)
         .then(response => response.json())
         .then(data => {
