@@ -1,26 +1,143 @@
 <!DOCTYPE html>
-<html>
+<html lang="th">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Quit Tracker</title>
+    <link rel="icon" type="image/png" href="https://cdn-icons-png.flaticon.com/512/785/785116.png">
+    <link href="https://fonts.googleapis.com/css2?family=Kanit:wght@400;600;700&display=swap" rel="stylesheet">
+    <style>
+      body { margin: 0; padding: 0; background-color: #121212; color: #ffffff; font-family: 'Kanit', sans-serif; -webkit-font-smoothing: antialiased; }
+      .app-container { max-width: 480px; margin: 0 auto; padding: 20px; padding-bottom: 90px; }
+      .header-section { text-align: center; margin-top: 30px; }
+      .flame-icon { font-size: 50px; margin-bottom: 10px; }
+      .victory-title { font-size: 22px; font-weight: 700; margin-bottom: 15px; }
+      .main-badge { background: linear-gradient(90deg, #00e676, #1de9b6); color: #000; padding: 10px 30px; border-radius: 30px; font-weight: 700; font-size: 18px; display: inline-block; box-shadow: 0 4px 15px rgba(0, 230, 118, 0.3); }
+      .subtitle { color: #8e8e93; font-size: 14px; margin-top: 20px; line-height: 1.5; }
+      .section-header { font-size: 13px; font-weight: 600; color: #8e8e93; letter-spacing: 1px; margin: 30px 0 15px 0; display: flex; align-items: center; }
+      .red-dot { width: 8px; height: 8px; background-color: #ff3b30; border-radius: 50%; margin-left: 8px; animation: pulse 1.5s infinite; }
+      @keyframes pulse { 0% { opacity: 1; } 50% { opacity: 0.4; } 100% { opacity: 1; } }
+      .timer-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; }
+      .time-box { background-color: #1c1c1e; border-radius: 12px; padding: 15px 10px; text-align: center; }
+      .time-val { font-size: 24px; font-weight: 700; margin-bottom: 5px; }
+      .time-label { font-size: 12px; color: #8e8e93; }
+      .progress-card { background-color: #1c1c1e; border-radius: 12px; padding: 15px; margin-bottom: 15px; }
+      .progress-text { display: flex; justify-content: space-between; font-size: 14px; margin-bottom: 10px; }
+      .progress-bg { background-color: #333; height: 6px; border-radius: 3px; width: 100%; overflow: hidden; }
+      .progress-fill { background-color: #00e676; height: 100%; width: 0%; transition: width 1s; }
+      .reset-btn { background-color: #2c2c2e; color: #ff3b30; border: 1px solid #ff3b30; width: 100%; padding: 15px; border-radius: 12px; font-size: 16px; font-weight: 600; margin-top: 30px; cursor: pointer; transition: 0.2s; font-family: 'Kanit', sans-serif; }
+      .reset-btn:active { background-color: #ff3b30; color: white; }
+      #loading { text-align: center; margin-top: 50px; color: #00e676; font-size: 18px; }
+      #main-app { display: none; }
+    </style>
+  </head>
+  <body>
+    <div class="app-container">
+      <div id="loading">กำลังเชื่อมต่อฐานข้อมูล...</div>
 
-<head>
-    <title>noporn</title>
-</head>
+      <div id="main-app">
+        <div class="header-section">
+          <div class="flame-icon">🔥</div>
+          <div class="victory-title">ระยะเวลาที่ทำได้ปัจจุบัน</div>
+          <div class="main-badge" id="badge-display">0 วินาที</div>
+          <div class="subtitle">รักษาสถิติไว้เพื่อฟื้นฟูตัวเองให้สมบูรณ์<br>คุณกำลังทำได้ดีมาก!</div>
+        </div>
 
-<body>
-    <iframe
-        src="https://script.google.com/macros/s/AKfycbwjvWNMwZtVtM7CzbyLLQmvMcSxmhFiteAPxgRHKAZxtoPvIidJEpRcldG5QqZK16_0YQ/exec"
-        width="100%"
-        height="100%"
-        allowfullscreen="true"
-        style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; border: none;">
-    </iframe>
+        <div class="section-header">เวลาปัจจุบัน <div class="red-dot"></div></div>
+        <div class="timer-grid">
+          <div class="time-box"><div class="time-val" id="t-year">0</div><div class="time-label">ปี</div></div>
+          <div class="time-box"><div class="time-val" id="t-month">0</div><div class="time-label">เดือน</div></div>
+          <div class="time-box"><div class="time-val" id="t-day">0</div><div class="time-label">วัน</div></div>
+          <div class="time-box"><div class="time-val" id="t-hour">0</div><div class="time-label">ชั่วโมง</div></div>
+          <div class="time-box"><div class="time-val" id="t-minute">0</div><div class="time-label">นาที</div></div>
+          <div class="time-box"><div class="time-val" id="t-second">0</div><div class="time-label">วินาที</div></div>
+        </div>
+
+        <div class="section-header">ความคืบหน้า (เป้าหมาย 24 ชั่วโมง)</div>
+        <div class="progress-card">
+          <div class="progress-text"><span>✔️ พยายามไปให้ถึง 1 วัน</span><span id="progress-percent">0%</span></div>
+          <div class="progress-bg"><div class="progress-fill" id="progress-fill"></div></div>
+        </div>
+
+        <button class="reset-btn" id="reset-btn" onclick="confirmReset()">🚨 ฉันพลาดแล้ว (เริ่มนับใหม่)</button>
+      </div>
+    </div>
 
     <script>
-        window.onload = function () {
-            document.querySelector('iframe').requestFullscreen().catch((err) => {
-                console.error(`Error attempting to enable full-screen mode: ${err.message}`);
-            });
-        };
-    </script>
-</body>
+      // =======================================================================
+      // เอาลิงก์ยาวๆ จาก Google Apps Script ที่ลงท้ายด้วย /exec มาใส่ในบรรทัดด้านล่างนี้
+      // =======================================================================
+      const API_URL = "https://script.google.com/macros/s/AKfycbytiyuHUrYBeUfVdDl4xtOMkU9zaj3KgNhV3_A1cOnvwQlOiTxSq03f9zSAle8munbKYQ/exec"; 
+      
+      let startTime = 0;
+      let timerInterval;
 
+      fetch(API_URL)
+        .then(response => response.json())
+        .then(data => {
+          startTime = data.time;
+          document.getElementById('loading').style.display = 'none';
+          document.getElementById('main-app').style.display = 'block';
+          startTimer();
+        })
+        .catch(error => {
+          document.getElementById('loading').innerText = "เชื่อมต่อฐานข้อมูลล้มเหลว โปรดตรวจสอบลิงก์ API";
+        });
+
+      function startTimer() {
+        if(timerInterval) clearInterval(timerInterval);
+        timerInterval = setInterval(updateTimerUI, 1000);
+        updateTimerUI();
+      }
+
+      function updateTimerUI() {
+        if (!startTime) return;
+        const now = new Date().getTime();
+        let diffSecs = Math.floor((now - startTime) / 1000);
+
+        const years = Math.floor(diffSecs / (365 * 24 * 3600)); diffSecs %= (365 * 24 * 3600);
+        const months = Math.floor(diffSecs / (30 * 24 * 3600)); diffSecs %= (30 * 24 * 3600);
+        const days = Math.floor(diffSecs / (24 * 3600)); diffSecs %= (24 * 3600);
+        const hours = Math.floor(diffSecs / 3600); diffSecs %= 3600;
+        const minutes = Math.floor(diffSecs / 60); const seconds = diffSecs % 60;
+
+        document.getElementById('t-year').innerText = years;
+        document.getElementById('t-month').innerText = months;
+        document.getElementById('t-day').innerText = days;
+        document.getElementById('t-hour').innerText = hours;
+        document.getElementById('t-minute').innerText = minutes;
+        document.getElementById('t-second').innerText = seconds;
+
+        let badgeText = "";
+        if (years > 0) badgeText = `${years} ปี ${months} เดือน`;
+        else if (months > 0) badgeText = `${months} เดือน ${days} วัน`;
+        else if (days > 0) badgeText = `${days} วัน ${hours} ชั่วโมง`;
+        else if (hours > 0) badgeText = `${hours} ชั่วโมง ${minutes} นาที`;
+        else if (minutes > 0) badgeText = `${minutes} นาที ${seconds} วินาที`;
+        else badgeText = `${seconds} วินาที`;
+        document.getElementById('badge-display').innerText = badgeText;
+
+        let totalCurrentSecs = Math.floor((now - startTime) / 1000);
+        let percent = (totalCurrentSecs / 86400) * 100;
+        if(percent > 100) percent = 100;
+        document.getElementById('progress-percent').innerText = percent.toFixed(2) + "%";
+        document.getElementById('progress-fill').style.width = percent + "%";
+      }
+
+      function confirmReset() {
+        if(confirm("คุณแน่ใจหรือไม่ว่าต้องการเริ่มนับใหม่? \nสถิติเดิมจะถูกบันทึกไว้ในประวัติ Sheet ของคุณ")) {
+          document.getElementById('reset-btn').innerText = "กำลังรีเซ็ตเวลา...";
+          
+          fetch(API_URL + "?action=reset")
+            .then(response => response.json())
+            .then(data => {
+              startTime = data.time;
+              document.getElementById('reset-btn').innerText = "🚨 ฉันพลาดแล้ว (เริ่มนับใหม่)";
+              alert("เวลาถูกรีเซ็ตแล้ว เริ่มต้นกันใหม่นะครับ เป็นกำลังใจให้!");
+              updateTimerUI(); 
+            });
+        }
+      }
+    </script>
+  </body>
 </html>
