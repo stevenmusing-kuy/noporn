@@ -286,6 +286,89 @@
         document.getElementById('progress-fill').style.width = percent + "%";
       }
 
+      function updateTimerUI() {
+        if (!startTime) return;
+        const now = new Date().getTime();
+        let diffSecs = Math.floor((now - startTime) / 1000);
+
+        const years = Math.floor(diffSecs / (365 * 24 * 3600)); diffSecs %= (365 * 24 * 3600);
+        const months = Math.floor(diffSecs / (30 * 24 * 3600)); diffSecs %= (30 * 24 * 3600);
+        const days = Math.floor(diffSecs / (24 * 3600)); diffSecs %= (24 * 3600);
+        const hours = Math.floor(diffSecs / 3600); diffSecs %= 3600;
+        const minutes = Math.floor(diffSecs / 60); const seconds = diffSecs % 60;
+
+        document.getElementById('t-year').innerText = years;
+        document.getElementById('t-month').innerText = months;
+        document.getElementById('t-day').innerText = days;
+        document.getElementById('t-hour').innerText = hours;
+        document.getElementById('t-minute').innerText = minutes;
+        document.getElementById('t-second').innerText = seconds;
+
+        let badgeText = "";
+        if (years > 0) badgeText = `${years} ปี ${months} เดือน`;
+        else if (months > 0) badgeText = `${months} เดือน ${days} วัน`;
+        else if (days > 0) badgeText = `${days} วัน ${hours} ชั่วโมง`;
+        else if (hours > 0) badgeText = `${hours} ชั่วโมง ${minutes} นาที`;
+        else if (minutes > 0) badgeText = `${minutes} นาที ${seconds} วินาที`;
+        else badgeText = `${seconds} วินาที`;
+        document.getElementById('badge-display').innerText = badgeText;
+
+        // ================= เริ่มส่วนที่แก้ไขใหม่ (เป้าหมายอัตโนมัติ) =================
+        let totalCurrentSecs = Math.floor((now - startTime) / 1000);
+        let nextGoalSecs = 0;
+        let goalText = "";
+        let goalTitle = "";
+
+        const dayInSecs = 86400;
+
+        if (totalCurrentSecs < dayInSecs) {
+            nextGoalSecs = dayInSecs;
+            goalText = "พยายามไปให้ถึง 1 วัน";
+            goalTitle = "ความคืบหน้า (เป้าหมาย 24 ชั่วโมง)";
+        } else if (totalCurrentSecs < dayInSecs * 3) {
+            nextGoalSecs = dayInSecs * 3;
+            goalText = "พยายามไปให้ถึง 3 วัน";
+            goalTitle = "ความคืบหน้า (เป้าหมาย 3 วัน)";
+        } else if (totalCurrentSecs < dayInSecs * 7) {
+            nextGoalSecs = dayInSecs * 7;
+            goalText = "พยายามไปให้ถึง 1 สัปดาห์";
+            goalTitle = "ความคืบหน้า (เป้าหมาย 1 สัปดาห์)";
+        } else if (totalCurrentSecs < dayInSecs * 14) {
+            nextGoalSecs = dayInSecs * 14;
+            goalText = "พยายามไปให้ถึง 2 สัปดาห์";
+            goalTitle = "ความคืบหน้า (เป้าหมาย 2 สัปดาห์)";
+        } else if (totalCurrentSecs < dayInSecs * 30) {
+            nextGoalSecs = dayInSecs * 30;
+            goalText = "พยายามไปให้ถึง 1 เดือน";
+            goalTitle = "ความคืบหน้า (เป้าหมาย 1 เดือน)";
+        } else if (totalCurrentSecs < dayInSecs * 90) {
+            nextGoalSecs = dayInSecs * 90;
+            goalText = "พยายามไปให้ถึง 3 เดือน";
+            goalTitle = "ความคืบหน้า (เป้าหมาย 3 เดือน)";
+        } else {
+            nextGoalSecs = totalCurrentSecs; 
+            goalText = "คุณสามารถควบคุมตัวเองได้อย่างสมบูรณ์แบบ!";
+            goalTitle = "ความคืบหน้า (อิสรภาพ)";
+        }
+
+        let percent = (totalCurrentSecs / nextGoalSecs) * 100;
+        if (percent > 100) percent = 100;
+
+        // ส่วนนี้จะส่งผลลัพธ์ไปที่ HTML จุดที่ 1 ที่เราแก้ไว้
+        const titleEl = document.getElementById('progress-title');
+        if(titleEl) titleEl.innerText = goalTitle;
+        
+        const labelEl = document.getElementById('progress-label');
+        if(labelEl) labelEl.innerText = "✔️ " + goalText;
+        
+        const percentEl = document.getElementById('progress-percent');
+        if(percentEl) percentEl.innerText = percent.toFixed(2) + "%";
+        
+        const fillEl = document.getElementById('progress-fill');
+        if(fillEl) fillEl.style.width = percent + "%";
+        // ================= จบส่วนที่แก้ไขใหม่ =================
+      }
+      
       function confirmReset() {
         if(confirm("คุณแน่ใจหรือไม่ว่าต้องการเริ่มนับใหม่? \nสถิติเดิมจะถูกบันทึกไว้ในประวัติ Sheet ของคุณ")) {
           document.getElementById('reset-btn').innerText = "กำลังรีเซ็ตเวลา...";
