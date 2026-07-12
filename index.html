@@ -285,67 +285,10 @@
         document.getElementById('progress-percent').innerText = percent.toFixed(2) + "%";
         document.getElementById('progress-fill').style.width = percent + "%";
       }
-      
-        // ================= เริ่มส่วนที่แก้ไขใหม่ (เป้าหมายอัตโนมัติ) =================
-        let totalCurrentSecs = Math.floor((now - startTime) / 1000);
-        let nextGoalSecs = 0;
-        let goalText = "";
-        let goalTitle = "";
-
-        const dayInSecs = 86400;
-
-        if (totalCurrentSecs < dayInSecs) {
-            nextGoalSecs = dayInSecs;
-            goalText = "พยายามไปให้ถึง 1 วัน";
-            goalTitle = "ความคืบหน้า (เป้าหมาย 24 ชั่วโมง)";
-        } else if (totalCurrentSecs < dayInSecs * 3) {
-            nextGoalSecs = dayInSecs * 3;
-            goalText = "พยายามไปให้ถึง 3 วัน";
-            goalTitle = "ความคืบหน้า (เป้าหมาย 3 วัน)";
-        } else if (totalCurrentSecs < dayInSecs * 7) {
-            nextGoalSecs = dayInSecs * 7;
-            goalText = "พยายามไปให้ถึง 1 สัปดาห์";
-            goalTitle = "ความคืบหน้า (เป้าหมาย 1 สัปดาห์)";
-        } else if (totalCurrentSecs < dayInSecs * 14) {
-            nextGoalSecs = dayInSecs * 14;
-            goalText = "พยายามไปให้ถึง 2 สัปดาห์";
-            goalTitle = "ความคืบหน้า (เป้าหมาย 2 สัปดาห์)";
-        } else if (totalCurrentSecs < dayInSecs * 30) {
-            nextGoalSecs = dayInSecs * 30;
-            goalText = "พยายามไปให้ถึง 1 เดือน";
-            goalTitle = "ความคืบหน้า (เป้าหมาย 1 เดือน)";
-        } else if (totalCurrentSecs < dayInSecs * 90) {
-            nextGoalSecs = dayInSecs * 90;
-            goalText = "พยายามไปให้ถึง 3 เดือน";
-            goalTitle = "ความคืบหน้า (เป้าหมาย 3 เดือน)";
-        } else {
-            nextGoalSecs = totalCurrentSecs; 
-            goalText = "คุณสามารถควบคุมตัวเองได้อย่างสมบูรณ์แบบ!";
-            goalTitle = "ความคืบหน้า (อิสรภาพ)";
-        }
-
-        let percent = (totalCurrentSecs / nextGoalSecs) * 100;
-        if (percent > 100) percent = 100;
-
-        // ส่วนนี้จะส่งผลลัพธ์ไปที่ HTML จุดที่ 1 ที่เราแก้ไว้
-        const titleEl = document.getElementById('progress-title');
-        if(titleEl) titleEl.innerText = goalTitle;
-        
-        const labelEl = document.getElementById('progress-label');
-        if(labelEl) labelEl.innerText = "✔️ " + goalText;
-        
-        const percentEl = document.getElementById('progress-percent');
-        if(percentEl) percentEl.innerText = percent.toFixed(2) + "%";
-        
-        const fillEl = document.getElementById('progress-fill');
-        if(fillEl) fillEl.style.width = percent + "%";
-        // ================= จบส่วนที่แก้ไขใหม่ =================
-      }
 
       function confirmReset() {
         if(confirm("คุณแน่ใจหรือไม่ว่าต้องการเริ่มนับใหม่? \nสถิติเดิมจะถูกบันทึกไว้ในประวัติ Sheet ของคุณ")) {
           document.getElementById('reset-btn').innerText = "กำลังรีเซ็ตเวลา...";
-          
           fetch(API_URL + "?action=reset")
             .then(response => response.json())
             .then(data => {
