@@ -19,7 +19,7 @@
       .victory-title { font-size: 22px; font-weight: 700; margin-bottom: 15px; }
       .main-badge { background: linear-gradient(90deg, #00e676, #1de9b6); color: #000; padding: 10px 30px; border-radius: 30px; font-weight: 700; font-size: 18px; display: inline-block; box-shadow: 0 4px 15px rgba(0, 230, 118, 0.3); }
       .subtitle { color: #8e8e93; font-size: 14px; margin-top: 20px; line-height: 1.5; }
-      .section-header { font-size: 13px; font-weight: 600; color: #8e8e93; letter-spacing: 1px; margin: 30px 0 15px 0; display: flex; align-items: center; }
+      .section-header { font-size: 13px; font-weight: 600; color: #8e8e93; letter-spacing: 1px; margin: 30px 0 15px 0; display: flex; align-items: center; text-transform: uppercase; }
       .red-dot { width: 8px; height: 8px; background-color: #ff3b30; border-radius: 50%; margin-left: 8px; animation: pulse 1.5s infinite; }
       @keyframes pulse { 0% { opacity: 1; } 50% { opacity: 0.4; } 100% { opacity: 1; } }
       .timer-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; }
@@ -76,7 +76,7 @@
             <div class="time-box"><div class="time-val" id="t-second">0</div><div class="time-label">วินาที</div></div>
           </div>
 
-          <!-- ฟีเจอร์ใหม่: เวลาที่ได้คืนมา -->
+          <!-- เวลาที่ได้คืนมา -->
           <div class="time-saved-box">
             <div class="time-saved-title">⏱️ เวลาชีวิตที่ได้กลับคืนมา (คำนวณวันละ 1 ชม.)</div>
             <div class="time-saved-val" id="time-saved-display">0 ชั่วโมง 0 นาที</div>
@@ -191,14 +191,14 @@
     <!-- ================= JAVASCRIPT ================= -->
     <script>
       // =======================================================================
-      // อย่าลืม! เอาลิงก์ API จาก Google Apps Script (ที่ลงท้ายด้วย /exec) มาวางตรงนี้
+      // ⚠️ นำลิงก์ API จาก Google Apps Script มาวางตรงนี้ (อย่าลืมเครื่องหมาย " ")
       // =======================================================================
-      const API_URL = "https://script.google.com/macros/s/AKfycbzFxNWCBYAi2ZM8VBe_jgXtDsMFijHAoGWlUi4iCGdru5J8eB4GV6z9jWF2YZT2Wc6A1g/exec";
+      const API_URL = "https://script.google.com/macros/s/AKfycbzFxNWCBYAi2ZM8VBe_jgXtDsMFijHAoGWlUi4iCGdru5J8eB4GV6z9jWF2YZT2Wc6A1g/exec"; 
       
       let startTime = 0;
       let timerInterval;
 
-      // ตรวจสอบเป้าหมายที่เคยบันทึกไว้ตอนเปิดแอป
+      // โหลดเป้าหมายจากความจำเครื่อง
       const savedGoal = localStorage.getItem('userGoal');
       if (savedGoal) {
         document.getElementById('goal-select').value = savedGoal;
@@ -229,14 +229,12 @@
         updateTimerUI();
       }
 
-      // ฟังก์ชันบันทึกเป้าหมาย (ซิงค์ Tab 4 ไป Tab 1)
       function saveGoalSetting() {
         const goalValue = document.getElementById('goal-select').value;
         localStorage.setItem('userGoal', goalValue);
-        updateTimerUI(); // อัปเดตหลอดทันที
+        updateTimerUI(); 
       }
 
-      // ฟังก์ชันสุ่มกิจกรรมสับสวิตช์ (Tab 2)
       function randomBrainSwitch() {
         const activities = [
           "หยิบแซกโซโฟนมาเป่าไล่สเกลหรือเล่นเพลงโปรด 15 นาที 🎷",
@@ -268,7 +266,7 @@
         document.getElementById('t-minute').innerText = minutes;
         document.getElementById('t-second').innerText = seconds;
 
-        // ข้อความ Badge
+        // ข้อความ Badge สรุปเวลา
         let badgeText = "";
         if (years > 0) badgeText = `${years} ปี ${months} เดือน`;
         else if (months > 0) badgeText = `${months} เดือน ${days} วัน`;
@@ -278,8 +276,7 @@
         else badgeText = `${seconds} วินาที`;
         document.getElementById('badge-display').innerText = badgeText;
 
-        // ================= แก้ไขคำนวณเวลาที่ได้คืนมา =================
-        // หลักการ: ผ่านไป 24 ชม. ประหยัดได้ 1 ชม. (หรือเท่ากับ 1/24 ของเวลาทั้งหมด)
+        // ================= คำนวณเวลาที่ได้คืนมา =================
         let savedTotalSecs = totalCurrentSecs / 24; 
         let savedHrs = Math.floor(savedTotalSecs / 3600);
         let savedMins = Math.floor((savedTotalSecs % 3600) / 60);
@@ -289,7 +286,7 @@
             savedDisplay.innerText = `${savedHrs} ชั่วโมง ${savedMins} นาที`;
         }
 
-        // ================= เพิ่มระบบอัปเดตหน้าการฟื้นฟู (Real-time) =================
+        // ================= อัปเดตหน้าการฟื้นฟู (Real-time) =================
         let percent3Days = Math.min((totalCurrentSecs / (86400 * 3)) * 100, 100);
         let percent7Days = Math.min((totalCurrentSecs / (86400 * 7)) * 100, 100);
         let percent30Days = Math.min((totalCurrentSecs / (86400 * 30)) * 100, 100);
@@ -320,8 +317,8 @@
                 badgeIcon.innerText = "🌱"; badgeText.innerText = "ระดับ: ผู้เริ่มต้น (Apprentice)";
             }
         }
-        
-        // คำนวณเปอร์เซ็นต์ตามเป้าหมายที่เลือกไว้ในตั้งค่า
+
+        // ================= คำนวณเปอร์เซ็นต์ตามเป้าหมาย (หน้าแรก) =================
         let userGoalDays = parseInt(localStorage.getItem('userGoal')) || 1;
         let nextGoalSecs = userGoalDays * 86400;
         
@@ -346,89 +343,6 @@
         document.getElementById('progress-fill').style.width = percent + "%";
       }
 
-      function updateTimerUI() {
-        if (!startTime) return;
-        const now = new Date().getTime();
-        let diffSecs = Math.floor((now - startTime) / 1000);
-
-        const years = Math.floor(diffSecs / (365 * 24 * 3600)); diffSecs %= (365 * 24 * 3600);
-        const months = Math.floor(diffSecs / (30 * 24 * 3600)); diffSecs %= (30 * 24 * 3600);
-        const days = Math.floor(diffSecs / (24 * 3600)); diffSecs %= (24 * 3600);
-        const hours = Math.floor(diffSecs / 3600); diffSecs %= 3600;
-        const minutes = Math.floor(diffSecs / 60); const seconds = diffSecs % 60;
-
-        document.getElementById('t-year').innerText = years;
-        document.getElementById('t-month').innerText = months;
-        document.getElementById('t-day').innerText = days;
-        document.getElementById('t-hour').innerText = hours;
-        document.getElementById('t-minute').innerText = minutes;
-        document.getElementById('t-second').innerText = seconds;
-
-        let badgeText = "";
-        if (years > 0) badgeText = `${years} ปี ${months} เดือน`;
-        else if (months > 0) badgeText = `${months} เดือน ${days} วัน`;
-        else if (days > 0) badgeText = `${days} วัน ${hours} ชั่วโมง`;
-        else if (hours > 0) badgeText = `${hours} ชั่วโมง ${minutes} นาที`;
-        else if (minutes > 0) badgeText = `${minutes} นาที ${seconds} วินาที`;
-        else badgeText = `${seconds} วินาที`;
-        document.getElementById('badge-display').innerText = badgeText;
-
-        // ================= เริ่มส่วนที่แก้ไขใหม่ (เป้าหมายอัตโนมัติ) =================
-        let totalCurrentSecs = Math.floor((now - startTime) / 1000);
-        let nextGoalSecs = 0;
-        let goalText = "";
-        let goalTitle = "";
-
-        const dayInSecs = 86400;
-
-        if (totalCurrentSecs < dayInSecs) {
-            nextGoalSecs = dayInSecs;
-            goalText = "พยายามไปให้ถึง 1 วัน";
-            goalTitle = "ความคืบหน้า (เป้าหมาย 24 ชั่วโมง)";
-        } else if (totalCurrentSecs < dayInSecs * 3) {
-            nextGoalSecs = dayInSecs * 3;
-            goalText = "พยายามไปให้ถึง 3 วัน";
-            goalTitle = "ความคืบหน้า (เป้าหมาย 3 วัน)";
-        } else if (totalCurrentSecs < dayInSecs * 7) {
-            nextGoalSecs = dayInSecs * 7;
-            goalText = "พยายามไปให้ถึง 1 สัปดาห์";
-            goalTitle = "ความคืบหน้า (เป้าหมาย 1 สัปดาห์)";
-        } else if (totalCurrentSecs < dayInSecs * 14) {
-            nextGoalSecs = dayInSecs * 14;
-            goalText = "พยายามไปให้ถึง 2 สัปดาห์";
-            goalTitle = "ความคืบหน้า (เป้าหมาย 2 สัปดาห์)";
-        } else if (totalCurrentSecs < dayInSecs * 30) {
-            nextGoalSecs = dayInSecs * 30;
-            goalText = "พยายามไปให้ถึง 1 เดือน";
-            goalTitle = "ความคืบหน้า (เป้าหมาย 1 เดือน)";
-        } else if (totalCurrentSecs < dayInSecs * 90) {
-            nextGoalSecs = dayInSecs * 90;
-            goalText = "พยายามไปให้ถึง 3 เดือน";
-            goalTitle = "ความคืบหน้า (เป้าหมาย 3 เดือน)";
-        } else {
-            nextGoalSecs = totalCurrentSecs; 
-            goalText = "คุณสามารถควบคุมตัวเองได้อย่างสมบูรณ์แบบ!";
-            goalTitle = "ความคืบหน้า (อิสรภาพ)";
-        }
-
-        let percent = (totalCurrentSecs / nextGoalSecs) * 100;
-        if (percent > 100) percent = 100;
-
-        // ส่วนนี้จะส่งผลลัพธ์ไปที่ HTML จุดที่ 1 ที่เราแก้ไว้
-        const titleEl = document.getElementById('progress-title');
-        if(titleEl) titleEl.innerText = goalTitle;
-        
-        const labelEl = document.getElementById('progress-label');
-        if(labelEl) labelEl.innerText = "✔️ " + goalText;
-        
-        const percentEl = document.getElementById('progress-percent');
-        if(percentEl) percentEl.innerText = percent.toFixed(2) + "%";
-        
-        const fillEl = document.getElementById('progress-fill');
-        if(fillEl) fillEl.style.width = percent + "%";
-        // ================= จบส่วนที่แก้ไขใหม่ =================
-      }
-      
       function confirmReset() {
         if(confirm("คุณแน่ใจหรือไม่ว่าต้องการเริ่มนับใหม่? \nสถิติเดิมจะถูกบันทึกไว้ในประวัติ Sheet ของคุณ")) {
           document.getElementById('reset-btn').innerText = "กำลังรีเซ็ตเวลา...";
