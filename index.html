@@ -43,10 +43,8 @@
       .nav-item { color: #8e8e93; text-align: center; font-size: 11px; cursor: pointer; flex: 1; }
       .nav-item.active { color: #00e676; }
       .nav-icon { font-size: 22px; display: block; margin-bottom: 4px; }
-      #loading { text-align: center; margin-top: 50px; color: #00e676; font-size: 18px; }
+      #loading { text-align: center; margin-top: 50px; color: #00e676; font-size: 18px; padding: 0 20px; word-wrap: break-word; }
       #main-app { display: none; }
-      
-      /* กล่องคำนวณเวลาที่ได้คืน */
       .time-saved-box { background: linear-gradient(135deg, #1e3c72, #2a5298); border-radius: 12px; padding: 15px; text-align: center; margin-top: 15px; box-shadow: 0 4px 10px rgba(0,0,0,0.2); }
       .time-saved-title { font-size: 13px; color: #cfd8dc; font-weight: 600; margin-bottom: 5px; }
       .time-saved-val { font-size: 22px; font-weight: 700; color: #fff; }
@@ -57,7 +55,7 @@
       <div id="loading">กำลังเชื่อมต่อฐานข้อมูล...</div>
 
       <div id="main-app">
-        <!-- ================= TAB 1: หน้าหลัก (Home) ================= -->
+        <!-- TAB 1: Home -->
         <div id="tab-home" class="tab-content active-tab">
           <div class="header-section">
             <div class="flame-icon">🔥</div>
@@ -65,7 +63,6 @@
             <div class="main-badge" id="badge-display">0 วินาที</div>
             <div class="subtitle">รักษาสถิติไว้เพื่อฟื้นฟูตัวเองให้สมบูรณ์<br>คุณกำลังทำได้ดีมาก!</div>
           </div>
-
           <div class="section-header">เวลาปัจจุบัน <div class="red-dot"></div></div>
           <div class="timer-grid">
             <div class="time-box"><div class="time-val" id="t-year">0</div><div class="time-label">ปี</div></div>
@@ -75,13 +72,10 @@
             <div class="time-box"><div class="time-val" id="t-minute">0</div><div class="time-label">นาที</div></div>
             <div class="time-box"><div class="time-val" id="t-second">0</div><div class="time-label">วินาที</div></div>
           </div>
-
-          <!-- เวลาที่ได้คืนมา -->
           <div class="time-saved-box">
             <div class="time-saved-title">⏱️ เวลาชีวิตที่ได้กลับคืนมา (คำนวณวันละ 1 ชม.)</div>
             <div class="time-saved-val" id="time-saved-display">0 ชั่วโมง 0 นาที</div>
           </div>
-
           <div class="section-header" id="progress-title">ความคืบหน้า (เป้าหมายปัจจุบัน)</div>
           <div class="progress-card">
             <div class="progress-text">
@@ -90,21 +84,18 @@
             </div>
             <div class="progress-bg"><div class="progress-fill" id="progress-fill"></div></div>
           </div>
-
           <button class="reset-btn" id="reset-btn" onclick="confirmReset()">🚨 ฉันพลาดแล้ว (เริ่มนับใหม่)</button>
         </div>
 
-        <!-- ================= TAB 2: เลิกสื่อลามก (Quit Porn) ================= -->
+        <!-- TAB 2: Quit Porn -->
         <div id="tab-quit" class="tab-content">
           <div class="section-header" style="margin-top: 10px;">เมนูช่วยเหลือ (QUIT PORN)</div>
-          
           <div class="card">
             <div class="card-title">🧠 กิจกรรมสับสวิตช์สมอง</div>
             <p style="color: #8e8e93; font-size: 13px; margin-bottom: 15px;">เมื่อเกิดความอยาก ให้กดปุ่มนี้เพื่อรับภารกิจเบี่ยงเบนความสนใจแบบสุ่ม หรือฟังคลิปดึงสติ</p>
             <button class="action-btn btn-panic" onclick="randomBrainSwitch()">🎲 สุ่มภารกิจด่วน!</button>
             <button class="action-btn" style="background-color: #1976d2; color: #fff; margin-bottom: 0;" onclick="window.open('https://www.youtube.com/results?search_query=motivation+speech')">🎧 ฟังคลิปสร้างแรงบันดาลใจ</button>
           </div>
-
           <div class="card">
             <div class="card-title">📝 บันทึกประจำวัน (Daily Log)</div>
             <select id="trigger-select" style="width: 100%; padding: 12px; border-radius: 8px; background: #2c2c2e; color: #fff; border: none; margin-bottom: 15px; font-family: 'Kanit';">
@@ -118,13 +109,12 @@
           </div>
         </div>
 
-        <!-- ================= TAB 3: การฟื้นฟู (Recovery) ================= -->
+        <!-- TAB 3: Recovery -->
         <div id="tab-recovery" class="tab-content">
           <div class="section-header" style="margin-top: 10px;">สถานะการฟื้นฟู (RECOVERY)</div>
           <div class="card">
             <div class="card-title">🧠 ระดับการฟื้นฟูทางสมองและร่างกาย</div>
             <p style="color: #8e8e93; font-size: 13px; margin-bottom: 20px;">ร่างกายของคุณกำลังรักษาตัวเอง รักษาสถิติไว้เพื่อปลดล็อกขั้นต่อไป</p>
-            
             <div style="margin-bottom: 15px;">
               <div style="display: flex; justify-content: space-between; font-size: 14px; margin-bottom: 5px;">
                 <span>🔋 พลังงานและความสดชื่น (เป้าหมาย 3 วัน)</span>
@@ -132,7 +122,6 @@
               </div>
               <div class="progress-bg"><div id="rec-bar-1" class="progress-fill" style="width: 0%; background-color: #29b6f6;"></div></div>
             </div>
-            
             <div style="margin-bottom: 15px;">
               <div style="display: flex; justify-content: space-between; font-size: 14px; margin-bottom: 5px;">
                 <span>👁️ ความมั่นใจและการสบตา (เป้าหมาย 7 วัน)</span>
@@ -140,7 +129,6 @@
               </div>
               <div class="progress-bg"><div id="rec-bar-2" class="progress-fill" style="width: 0%; background-color: #ab47bc;"></div></div>
             </div>
-            
             <div style="margin-bottom: 15px;">
               <div style="display: flex; justify-content: space-between; font-size: 14px; margin-bottom: 5px;">
                 <span>🧩 สมองปลอดโปร่ง โฟกัสดีขึ้น (เป้าหมาย 30 วัน)</span>
@@ -149,7 +137,6 @@
               <div class="progress-bg"><div id="rec-bar-3" class="progress-fill" style="width: 0%; background-color: #ffa726;"></div></div>
             </div>
           </div>
-          
           <div class="card" style="text-align: center;">
             <div class="card-title">🏆 เหรียญตราของคุณ</div>
             <div id="rec-badge-icon" style="font-size: 50px; margin: 10px 0;">🌱</div>
@@ -157,7 +144,7 @@
           </div>
         </div>
 
-        <!-- ================= TAB 4: ตั้งค่า (Settings) ================= -->
+        <!-- TAB 4: Settings -->
         <div id="tab-settings" class="tab-content">
           <div class="section-header" style="margin-top: 10px;">การตั้งค่า (SETTINGS)</div>
           <div class="card">
@@ -180,7 +167,7 @@
       </div>
     </div>
 
-    <!-- ================= BOTTOM NAVIGATION ================= -->
+    <!-- BOTTOM NAVIGATION -->
     <div class="bottom-nav">
       <div class="nav-item active" id="nav-home" onclick="switchTab('home')"><span class="nav-icon">🏠</span>หน้าหลัก</div>
       <div class="nav-item" id="nav-quit" onclick="switchTab('quit')"><span class="nav-icon">🛡️</span>เลิกดู</div>
@@ -188,21 +175,48 @@
       <div class="nav-item" id="nav-settings" onclick="switchTab('settings')"><span class="nav-icon">⚙️</span>ตั้งค่า</div>
     </div>
 
-    <!-- ================= JAVASCRIPT ================= -->
     <script>
-      // =======================================================================
-      // ⚠️ นำลิงก์ API จาก Google Apps Script มาวางตรงนี้ (อย่าลืมเครื่องหมาย " ")
-      // =======================================================================
+      // ⚠️ ใส่ลิงก์ของคุณที่นี่ ⚠️
       const API_URL = "https://script.google.com/macros/s/AKfycbyFK5vZrXxSs3PXytjln6d-nFQcLj6cyg9jDYGCbLBjbesyYRdn1MP5VPPQxIxKcHBvBg/exec"; 
       
       let startTime = 0;
       let timerInterval;
 
-      // โหลดเป้าหมายจากความจำเครื่อง
-      const savedGoal = localStorage.getItem('userGoal');
-      if (savedGoal) {
-        document.getElementById('goal-select').value = savedGoal;
-      }
+      // ระบบ Boot กันโค้ดพัง (Safe Boot)
+      window.addEventListener('DOMContentLoaded', () => {
+        try {
+          // ป้องกัน Safari บล็อก LocalStorage แล้วทำโค้ดพัง
+          let savedGoal = "1";
+          try {
+            savedGoal = localStorage.getItem('userGoal') || "1";
+          } catch(e) { console.log("Storage Blocked"); }
+          
+          let selectGoal = document.getElementById('goal-select');
+          if (selectGoal) selectGoal.value = savedGoal;
+
+          // เริ่มดึงข้อมูลจาก API
+          fetch(API_URL)
+            .then(response => {
+              if(!response.ok) throw new Error("การตอบสนองเครือข่ายผิดปกติ");
+              return response.json();
+            })
+            .then(data => {
+              startTime = data.time;
+              document.getElementById('loading').style.display = 'none';
+              document.getElementById('main-app').style.display = 'block';
+              if(timerInterval) clearInterval(timerInterval);
+              timerInterval = setInterval(updateTimerUI, 1000);
+              updateTimerUI();
+            })
+            .catch(error => {
+              document.getElementById('loading').innerText = "เชื่อมต่อล้มเหลว (ลองกดรีเฟรชหน้าเว็บดูอีกครั้ง): " + error.message;
+              document.getElementById('loading').style.color = "#ff3b30";
+            });
+        } catch (fatalError) {
+          document.getElementById('loading').innerText = "ระบบขัดข้องภายใน: " + fatalError.message;
+          document.getElementById('loading').style.color = "#ff3b30";
+        }
+      });
 
       function switchTab(tabName) {
         document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('active-tab'));
@@ -211,28 +225,12 @@
         document.getElementById('nav-' + tabName).classList.add('active');
       }
 
-      fetch(API_URL)
-        .then(response => response.json())
-        .then(data => {
-          startTime = data.time;
-          document.getElementById('loading').style.display = 'none';
-          document.getElementById('main-app').style.display = 'block';
-          startTimer();
-        })
-        .catch(error => {
-          document.getElementById('loading').innerText = "เชื่อมต่อฐานข้อมูลล้มเหลว โปรดตรวจสอบลิงก์ API";
-        });
-
-      function startTimer() {
-        if(timerInterval) clearInterval(timerInterval);
-        timerInterval = setInterval(updateTimerUI, 1000);
-        updateTimerUI();
-      }
-
       function saveGoalSetting() {
-        const goalValue = document.getElementById('goal-select').value;
-        localStorage.setItem('userGoal', goalValue);
-        updateTimerUI(); 
+        try {
+          const goalValue = document.getElementById('goal-select').value;
+          localStorage.setItem('userGoal', goalValue);
+          updateTimerUI(); 
+        } catch(e) { alert("ไม่สามารถบันทึกเป้าหมายได้ (อาจเป็นเพราะโหมดส่วนตัวของเบราว์เซอร์)"); }
       }
 
       function randomBrainSwitch() {
@@ -266,7 +264,6 @@
         document.getElementById('t-minute').innerText = minutes;
         document.getElementById('t-second').innerText = seconds;
 
-        // ข้อความ Badge สรุปเวลา
         let badgeText = "";
         if (years > 0) badgeText = `${years} ปี ${months} เดือน`;
         else if (months > 0) badgeText = `${months} เดือน ${days} วัน`;
@@ -276,52 +273,41 @@
         else badgeText = `${seconds} วินาที`;
         document.getElementById('badge-display').innerText = badgeText;
 
-        // ================= คำนวณเวลาที่ได้คืนมา =================
+        // คำนวณเวลาที่ได้คืนมา
         let savedTotalSecs = totalCurrentSecs / 24; 
         let savedHrs = Math.floor(savedTotalSecs / 3600);
         let savedMins = Math.floor((savedTotalSecs % 3600) / 60);
-        
         let savedDisplay = document.getElementById('time-saved-display');
-        if (savedDisplay) {
-            savedDisplay.innerText = `${savedHrs} ชั่วโมง ${savedMins} นาที`;
-        }
+        if (savedDisplay) { savedDisplay.innerText = `${savedHrs} ชั่วโมง ${savedMins} นาที`; }
 
-        // ================= อัปเดตหน้าการฟื้นฟู (Real-time) =================
+        // อัปเดตหน้าการฟื้นฟู 
         let percent3Days = Math.min((totalCurrentSecs / (86400 * 3)) * 100, 100);
         let percent7Days = Math.min((totalCurrentSecs / (86400 * 7)) * 100, 100);
         let percent30Days = Math.min((totalCurrentSecs / (86400 * 30)) * 100, 100);
 
-        let bar1 = document.getElementById('rec-bar-1');
-        let text1 = document.getElementById('rec-text-1');
+        let bar1 = document.getElementById('rec-bar-1'); let text1 = document.getElementById('rec-text-1');
         if(bar1 && text1) { bar1.style.width = percent3Days + "%"; text1.innerText = percent3Days.toFixed(1) + "%"; }
 
-        let bar2 = document.getElementById('rec-bar-2');
-        let text2 = document.getElementById('rec-text-2');
+        let bar2 = document.getElementById('rec-bar-2'); let text2 = document.getElementById('rec-text-2');
         if(bar2 && text2) { bar2.style.width = percent7Days + "%"; text2.innerText = percent7Days.toFixed(1) + "%"; }
 
-        let bar3 = document.getElementById('rec-bar-3');
-        let text3 = document.getElementById('rec-text-3');
+        let bar3 = document.getElementById('rec-bar-3'); let text3 = document.getElementById('rec-text-3');
         if(bar3 && text3) { bar3.style.width = percent30Days + "%"; text3.innerText = percent30Days.toFixed(1) + "%"; }
 
-        // เลื่อนขั้นเหรียญตราอัตโนมัติ
         let badgeIcon = document.getElementById('rec-badge-icon');
         let badgeText = document.getElementById('rec-badge-text');
         if (badgeIcon && badgeText) {
-            if (totalCurrentSecs >= 86400 * 30) {
-                badgeIcon.innerText = "🧩"; badgeText.innerText = "ระดับ: สมองปลอดโปร่ง (Clear Mind)";
-            } else if (totalCurrentSecs >= 86400 * 7) {
-                badgeIcon.innerText = "👁️"; badgeText.innerText = "ระดับ: ผู้มีความมั่นใจ (Confident)";
-            } else if (totalCurrentSecs >= 86400 * 3) {
-                badgeIcon.innerText = "🔋"; badgeText.innerText = "ระดับ: พลังงานเต็มเปี่ยม (Energized)";
-            } else {
-                badgeIcon.innerText = "🌱"; badgeText.innerText = "ระดับ: ผู้เริ่มต้น (Apprentice)";
-            }
+            if (totalCurrentSecs >= 86400 * 30) { badgeIcon.innerText = "🧩"; badgeText.innerText = "ระดับ: สมองปลอดโปร่ง (Clear Mind)"; }
+            else if (totalCurrentSecs >= 86400 * 7) { badgeIcon.innerText = "👁️"; badgeText.innerText = "ระดับ: ผู้มีความมั่นใจ (Confident)"; }
+            else if (totalCurrentSecs >= 86400 * 3) { badgeIcon.innerText = "🔋"; badgeText.innerText = "ระดับ: พลังงานเต็มเปี่ยม (Energized)"; }
+            else { badgeIcon.innerText = "🌱"; badgeText.innerText = "ระดับ: ผู้เริ่มต้น (Apprentice)"; }
         }
 
-        // ================= คำนวณเปอร์เซ็นต์ตามเป้าหมาย (หน้าแรก) =================
-        let userGoalDays = parseInt(localStorage.getItem('userGoal')) || 1;
-        let nextGoalSecs = userGoalDays * 86400;
+        // คำนวณเปอร์เซ็นต์ตามเป้าหมาย (หน้าแรก)
+        let userGoalDays = 1;
+        try { userGoalDays = parseInt(localStorage.getItem('userGoal')) || 1; } catch(e) {}
         
+        let nextGoalSecs = userGoalDays * 86400;
         let goalText = `พยายามไปให้ถึง ${userGoalDays} วัน`;
         let titleText = `ความคืบหน้า (เป้าหมาย ${userGoalDays} วัน)`;
         
@@ -329,13 +315,8 @@
         if(userGoalDays == 30) { goalText = "พยายามไปให้ถึง 1 เดือน"; titleText = "ความคืบหน้า (เป้าหมาย 1 เดือน)"; }
         if(userGoalDays == 90) { goalText = "พยายามไปให้ถึง 3 เดือน"; titleText = "ความคืบหน้า (เป้าหมาย 3 เดือน)"; }
 
-        let percent = (totalCurrentSecs / nextGoalSecs) * 100;
-        let isGoalReached = false;
-        
-        if (percent >= 100) {
-            percent = 100;
-            isGoalReached = true;
-        }
+        let percent = Math.min((totalCurrentSecs / nextGoalSecs) * 100, 100);
+        let isGoalReached = (percent >= 100);
 
         document.getElementById('progress-title').innerText = titleText;
         document.getElementById('progress-label').innerText = isGoalReached ? "🎉 บรรลุเป้าหมายแล้ว!" : "✔️ " + goalText;
