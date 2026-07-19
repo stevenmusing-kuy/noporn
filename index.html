@@ -124,14 +124,36 @@
           <div class="card">
             <div class="card-title">🧠 ระดับการฟื้นฟูทางสมองและร่างกาย</div>
             <p style="color: #8e8e93; font-size: 13px; margin-bottom: 20px;">ร่างกายของคุณกำลังรักษาตัวเอง รักษาสถิติไว้เพื่อปลดล็อกขั้นต่อไป</p>
-            <div style="margin-bottom: 15px;"><div style="display: flex; justify-content: space-between; font-size: 14px; margin-bottom: 5px;"><span>🔋 พลังงานและความสดชื่น (เป้าหมาย 3 วัน)</span></div><div class="progress-bg"><div class="progress-fill" style="width: 30%; background-color: #29b6f6;"></div></div></div>
-            <div style="margin-bottom: 15px;"><div style="display: flex; justify-content: space-between; font-size: 14px; margin-bottom: 5px;"><span>👁️ ความมั่นใจและการสบตา (เป้าหมาย 7 วัน)</span></div><div class="progress-bg"><div class="progress-fill" style="width: 10%; background-color: #ab47bc;"></div></div></div>
-            <div style="margin-bottom: 15px;"><div style="display: flex; justify-content: space-between; font-size: 14px; margin-bottom: 5px;"><span>🧩 สมองปลอดโปร่ง โฟกัสดีขึ้น (เป้าหมาย 30 วัน)</span></div><div class="progress-bg"><div class="progress-fill" style="width: 2%; background-color: #ffa726;"></div></div></div>
+            
+            <div style="margin-bottom: 15px;">
+              <div style="display: flex; justify-content: space-between; font-size: 14px; margin-bottom: 5px;">
+                <span>🔋 พลังงานและความสดชื่น (เป้าหมาย 3 วัน)</span>
+                <span id="rec-text-1">0%</span>
+              </div>
+              <div class="progress-bg"><div id="rec-bar-1" class="progress-fill" style="width: 0%; background-color: #29b6f6;"></div></div>
+            </div>
+            
+            <div style="margin-bottom: 15px;">
+              <div style="display: flex; justify-content: space-between; font-size: 14px; margin-bottom: 5px;">
+                <span>👁️ ความมั่นใจและการสบตา (เป้าหมาย 7 วัน)</span>
+                <span id="rec-text-2">0%</span>
+              </div>
+              <div class="progress-bg"><div id="rec-bar-2" class="progress-fill" style="width: 0%; background-color: #ab47bc;"></div></div>
+            </div>
+            
+            <div style="margin-bottom: 15px;">
+              <div style="display: flex; justify-content: space-between; font-size: 14px; margin-bottom: 5px;">
+                <span>🧩 สมองปลอดโปร่ง โฟกัสดีขึ้น (เป้าหมาย 30 วัน)</span>
+                <span id="rec-text-3">0%</span>
+              </div>
+              <div class="progress-bg"><div id="rec-bar-3" class="progress-fill" style="width: 0%; background-color: #ffa726;"></div></div>
+            </div>
           </div>
+          
           <div class="card" style="text-align: center;">
             <div class="card-title">🏆 เหรียญตราของคุณ</div>
-            <div style="font-size: 50px; margin: 10px 0;">🌱</div>
-            <div style="color: #00e676; font-weight: 600;">ระดับ: ผู้เริ่มต้น (Apprentice)</div>
+            <div id="rec-badge-icon" style="font-size: 50px; margin: 10px 0;">🌱</div>
+            <div id="rec-badge-text" style="color: #00e676; font-weight: 600;">ระดับ: ผู้เริ่มต้น (Apprentice)</div>
           </div>
         </div>
 
@@ -256,12 +278,49 @@
         else badgeText = `${seconds} วินาที`;
         document.getElementById('badge-display').innerText = badgeText;
 
-        // คำนวณเวลาที่ได้คืนมา (สมมติประหยัดเวลาได้ 1 ชม. ต่อวัน)
-        let savedMinutesTotal = Math.floor((totalCurrentSecs / 86400) * 60); 
-        let savedHrs = Math.floor(savedMinutesTotal / 60);
-        let savedMins = savedMinutesTotal % 60;
-        document.getElementById('time-saved-display').innerText = `${savedHrs} ชั่วโมง ${savedMins} นาที`;
+        // ================= แก้ไขคำนวณเวลาที่ได้คืนมา =================
+        // หลักการ: ผ่านไป 24 ชม. ประหยัดได้ 1 ชม. (หรือเท่ากับ 1/24 ของเวลาทั้งหมด)
+        let savedTotalSecs = totalCurrentSecs / 24; 
+        let savedHrs = Math.floor(savedTotalSecs / 3600);
+        let savedMins = Math.floor((savedTotalSecs % 3600) / 60);
+        
+        let savedDisplay = document.getElementById('time-saved-display');
+        if (savedDisplay) {
+            savedDisplay.innerText = `${savedHrs} ชั่วโมง ${savedMins} นาที`;
+        }
 
+        // ================= เพิ่มระบบอัปเดตหน้าการฟื้นฟู (Real-time) =================
+        let percent3Days = Math.min((totalCurrentSecs / (86400 * 3)) * 100, 100);
+        let percent7Days = Math.min((totalCurrentSecs / (86400 * 7)) * 100, 100);
+        let percent30Days = Math.min((totalCurrentSecs / (86400 * 30)) * 100, 100);
+
+        let bar1 = document.getElementById('rec-bar-1');
+        let text1 = document.getElementById('rec-text-1');
+        if(bar1 && text1) { bar1.style.width = percent3Days + "%"; text1.innerText = percent3Days.toFixed(1) + "%"; }
+
+        let bar2 = document.getElementById('rec-bar-2');
+        let text2 = document.getElementById('rec-text-2');
+        if(bar2 && text2) { bar2.style.width = percent7Days + "%"; text2.innerText = percent7Days.toFixed(1) + "%"; }
+
+        let bar3 = document.getElementById('rec-bar-3');
+        let text3 = document.getElementById('rec-text-3');
+        if(bar3 && text3) { bar3.style.width = percent30Days + "%"; text3.innerText = percent30Days.toFixed(1) + "%"; }
+
+        // เลื่อนขั้นเหรียญตราอัตโนมัติ
+        let badgeIcon = document.getElementById('rec-badge-icon');
+        let badgeText = document.getElementById('rec-badge-text');
+        if (badgeIcon && badgeText) {
+            if (totalCurrentSecs >= 86400 * 30) {
+                badgeIcon.innerText = "🧩"; badgeText.innerText = "ระดับ: สมองปลอดโปร่ง (Clear Mind)";
+            } else if (totalCurrentSecs >= 86400 * 7) {
+                badgeIcon.innerText = "👁️"; badgeText.innerText = "ระดับ: ผู้มีความมั่นใจ (Confident)";
+            } else if (totalCurrentSecs >= 86400 * 3) {
+                badgeIcon.innerText = "🔋"; badgeText.innerText = "ระดับ: พลังงานเต็มเปี่ยม (Energized)";
+            } else {
+                badgeIcon.innerText = "🌱"; badgeText.innerText = "ระดับ: ผู้เริ่มต้น (Apprentice)";
+            }
+        }
+        
         // คำนวณเปอร์เซ็นต์ตามเป้าหมายที่เลือกไว้ในตั้งค่า
         let userGoalDays = parseInt(localStorage.getItem('userGoal')) || 1;
         let nextGoalSecs = userGoalDays * 86400;
