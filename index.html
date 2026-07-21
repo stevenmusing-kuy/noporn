@@ -4,65 +4,58 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Quit Tracker</title>
-    <link rel="icon" type="image/png" href="https://cdn-icons-png.flaticon.com/512/785/785116.png">
+    <link rel="icon" type="image/png" href="https://img2.pic.in.th/Gemini_Generated_Image_dbwgq3dbwgq3dbwg.png">
+    <link rel="apple-touch-icon" href="https://img2.pic.in.th/Gemini_Generated_Image_dbwgq3dbwgq3dbwg.png">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="Quit Porn">
     <link href="https://fonts.googleapis.com/css2?family=Kanit:wght@400;600;700&display=swap" rel="stylesheet">
     <style>
       /* ================= STYLE หลัก ================= */
       body { margin: 0; padding: 0; background-color: #121212; color: #ffffff; font-family: 'Kanit', sans-serif; -webkit-font-smoothing: antialiased; }
       .app-container { max-width: 480px; margin: 0 auto; padding: 20px; padding-bottom: 90px; }
-      
-      /* Header & Main Badge */
       .header-section { text-align: center; margin-top: 30px; }
       .flame-icon { font-size: 50px; margin-bottom: 10px; }
       .victory-title { font-size: 22px; font-weight: 700; margin-bottom: 15px; }
       .main-badge { background: linear-gradient(90deg, #00e676, #1de9b6); color: #000; padding: 10px 30px; border-radius: 30px; font-weight: 700; font-size: 18px; display: inline-block; box-shadow: 0 4px 15px rgba(0, 230, 118, 0.3); }
       .subtitle { color: #8e8e93; font-size: 14px; margin-top: 20px; line-height: 1.5; }
-
-      /* Live Timer Section */
-      .section-header { font-size: 13px; font-weight: 600; color: #8e8e93; letter-spacing: 1px; margin: 30px 0 15px 0; display: flex; align-items: center; }
+      .section-header { font-size: 13px; font-weight: 600; color: #8e8e93; letter-spacing: 1px; margin: 30px 0 15px 0; display: flex; align-items: center; text-transform: uppercase; }
       .red-dot { width: 8px; height: 8px; background-color: #ff3b30; border-radius: 50%; margin-left: 8px; animation: pulse 1.5s infinite; }
       @keyframes pulse { 0% { opacity: 1; } 50% { opacity: 0.4; } 100% { opacity: 1; } }
       .timer-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; }
       .time-box { background-color: #1c1c1e; border-radius: 12px; padding: 15px 10px; text-align: center; }
       .time-val { font-size: 24px; font-weight: 700; margin-bottom: 5px; }
       .time-label { font-size: 12px; color: #8e8e93; }
-
-      /* Progress & Cards */
       .progress-card, .card { background-color: #1c1c1e; border-radius: 12px; padding: 15px; margin-bottom: 15px; }
       .card-title { font-size: 16px; font-weight: 600; margin-bottom: 10px; color: #fff; }
       .progress-text { display: flex; justify-content: space-between; font-size: 14px; margin-bottom: 10px; }
       .progress-bg { background-color: #333; height: 6px; border-radius: 3px; width: 100%; overflow: hidden; }
       .progress-fill { background-color: #00e676; height: 100%; width: 0%; transition: width 1s; }
-
-      /* Buttons */
       .reset-btn { background-color: #2c2c2e; color: #ff3b30; border: 1px solid #ff3b30; width: 100%; padding: 15px; border-radius: 12px; font-size: 16px; font-weight: 600; margin-top: 30px; cursor: pointer; transition: 0.2s; font-family: 'Kanit', sans-serif; }
       .reset-btn:active { background-color: #ff3b30; color: white; }
       .action-btn { width: 100%; padding: 15px; border-radius: 12px; font-size: 16px; font-weight: 600; font-family: 'Kanit', sans-serif; cursor: pointer; margin-bottom: 15px; border: none; }
       .btn-panic { background-color: #ff9800; color: #fff; }
       .btn-log { background-color: #2c2c2e; color: #00e676; border: 1px solid #00e676; }
-
-      /* Tab Content Management */
       .tab-content { display: none; }
       .tab-content.active-tab { display: block; animation: fadeIn 0.3s ease-in-out; }
       @keyframes fadeIn { from { opacity: 0; transform: translateY(5px); } to { opacity: 1; transform: translateY(0); } }
-
-      /* Bottom Nav */
       .bottom-nav { position: fixed; bottom: 0; left: 0; right: 0; background-color: #1c1c1e; display: flex; justify-content: space-around; padding: 12px 0 25px 0; border-top: 1px solid #333; max-width: 480px; margin: 0 auto; z-index: 100; }
       .nav-item { color: #8e8e93; text-align: center; font-size: 11px; cursor: pointer; flex: 1; }
       .nav-item.active { color: #00e676; }
       .nav-icon { font-size: 22px; display: block; margin-bottom: 4px; }
-      
-      #loading { text-align: center; margin-top: 50px; color: #00e676; font-size: 18px; }
+      #loading { text-align: center; margin-top: 50px; color: #00e676; font-size: 18px; padding: 0 20px; word-wrap: break-word; }
       #main-app { display: none; }
+      .time-saved-box { background: linear-gradient(135deg, #1e3c72, #2a5298); border-radius: 12px; padding: 15px; text-align: center; margin-top: 15px; box-shadow: 0 4px 10px rgba(0,0,0,0.2); }
+      .time-saved-title { font-size: 13px; color: #cfd8dc; font-weight: 600; margin-bottom: 5px; }
+      .time-saved-val { font-size: 22px; font-weight: 700; color: #fff; }
     </style>
   </head>
   <body>
-    
     <div class="app-container">
       <div id="loading">กำลังเชื่อมต่อฐานข้อมูล...</div>
 
       <div id="main-app">
-        <!-- ================= TAB 1: หน้าหลัก (Home) ================= -->
+        <!-- TAB 1: Home -->
         <div id="tab-home" class="tab-content active-tab">
           <div class="header-section">
             <div class="flame-icon">🔥</div>
@@ -70,7 +63,6 @@
             <div class="main-badge" id="badge-display">0 วินาที</div>
             <div class="subtitle">รักษาสถิติไว้เพื่อฟื้นฟูตัวเองให้สมบูรณ์<br>คุณกำลังทำได้ดีมาก!</div>
           </div>
-
           <div class="section-header">เวลาปัจจุบัน <div class="red-dot"></div></div>
           <div class="timer-grid">
             <div class="time-box"><div class="time-val" id="t-year">0</div><div class="time-label">ปี</div></div>
@@ -80,30 +72,30 @@
             <div class="time-box"><div class="time-val" id="t-minute">0</div><div class="time-label">นาที</div></div>
             <div class="time-box"><div class="time-val" id="t-second">0</div><div class="time-label">วินาที</div></div>
           </div>
-
-          <div class="section-header">ความคืบหน้า (เป้าหมาย 24 ชั่วโมง)</div>
+          <div class="time-saved-box">
+            <div class="time-saved-title">⏱️ เวลาชีวิตที่ได้กลับคืนมา (คำนวณวันละ 1 ชม.)</div>
+            <div class="time-saved-val" id="time-saved-display">0 ชั่วโมง 0 นาที</div>
+          </div>
+          <div class="section-header" id="progress-title">ความคืบหน้า (เป้าหมายปัจจุบัน)</div>
           <div class="progress-card">
             <div class="progress-text">
-              <span>✔️ พยายามไปให้ถึง 1 วัน</span>
+              <span id="progress-label">✔️ พยายามไปให้ถึงเป้าหมาย</span>
               <span id="progress-percent">0%</span>
             </div>
             <div class="progress-bg"><div class="progress-fill" id="progress-fill"></div></div>
           </div>
-
           <button class="reset-btn" id="reset-btn" onclick="confirmReset()">🚨 ฉันพลาดแล้ว (เริ่มนับใหม่)</button>
         </div>
 
-        <!-- ================= TAB 2: เลิกสื่อลามก (Quit Porn) ================= -->
+        <!-- TAB 2: Quit Porn -->
         <div id="tab-quit" class="tab-content">
           <div class="section-header" style="margin-top: 10px;">เมนูช่วยเหลือ (QUIT PORN)</div>
-          
           <div class="card">
-            <div class="card-title">🚨 รับมือกับความอยาก (Urge Surfing)</div>
-            <p style="color: #8e8e93; font-size: 13px; margin-bottom: 15px;">ความอยากจะพุ่งสูงสุดแค่ 10-20 นาที กดปุ่มด้านล่างเพื่อเบี่ยงเบนความสนใจ</p>
-            <button class="action-btn btn-panic" onclick="alert('หายใจเข้าลึกๆ นับ 1-4...\nกลั้นหายใจ นับ 1-4...\nหายใจออกยาวๆ นับ 1-6...\n\nทำซ้ำ 5 รอบ คุณเก่งมากที่เลือกเปิดแอปนี้แทน!')">🧘‍♂️ ฝึกหายใจ 1 นาที</button>
-            <button class="action-btn" style="background-color: #1976d2; color: #fff;" onclick="window.open('https://www.youtube.com/results?search_query=motivation+speech')">🎧 ฟังคลิปสร้างแรงบันดาลใจ</button>
+            <div class="card-title">🧠 กิจกรรมสับสวิตช์สมอง</div>
+            <p style="color: #8e8e93; font-size: 13px; margin-bottom: 15px;">เมื่อเกิดความอยาก ให้กดปุ่มนี้เพื่อรับภารกิจเบี่ยงเบนความสนใจแบบสุ่ม หรือฟังคลิปดึงสติ</p>
+            <button class="action-btn btn-panic" onclick="randomBrainSwitch()">🎲 สุ่มภารกิจด่วน!</button>
+            <button class="action-btn" style="background-color: #1976d2; color: #fff; margin-bottom: 0;" onclick="window.open('https://www.youtube.com/results?search_query=motivation+speech')">🎧 ฟังคลิปสร้างแรงบันดาลใจ</button>
           </div>
-
           <div class="card">
             <div class="card-title">📝 บันทึกประจำวัน (Daily Log)</div>
             <select id="trigger-select" style="width: 100%; padding: 12px; border-radius: 8px; background: #2c2c2e; color: #fff; border: none; margin-bottom: 15px; font-family: 'Kanit';">
@@ -117,125 +109,147 @@
           </div>
         </div>
 
-        <!-- ================= TAB 3: การฟื้นฟู (Recovery) ================= -->
+        <!-- TAB 3: Recovery -->
         <div id="tab-recovery" class="tab-content">
           <div class="section-header" style="margin-top: 10px;">สถานะการฟื้นฟู (RECOVERY)</div>
-          
           <div class="card">
             <div class="card-title">🧠 ระดับการฟื้นฟูทางสมองและร่างกาย</div>
             <p style="color: #8e8e93; font-size: 13px; margin-bottom: 20px;">ร่างกายของคุณกำลังรักษาตัวเอง รักษาสถิติไว้เพื่อปลดล็อกขั้นต่อไป</p>
             <div style="margin-bottom: 15px;">
               <div style="display: flex; justify-content: space-between; font-size: 14px; margin-bottom: 5px;">
                 <span>🔋 พลังงานและความสดชื่น (เป้าหมาย 3 วัน)</span>
+                <span id="rec-text-1">0%</span>
               </div>
-              <div class="progress-bg"><div class="progress-fill" style="width: 30%; background-color: #29b6f6;"></div></div>
+              <div class="progress-bg"><div id="rec-bar-1" class="progress-fill" style="width: 0%; background-color: #29b6f6;"></div></div>
             </div>
             <div style="margin-bottom: 15px;">
               <div style="display: flex; justify-content: space-between; font-size: 14px; margin-bottom: 5px;">
                 <span>👁️ ความมั่นใจและการสบตา (เป้าหมาย 7 วัน)</span>
+                <span id="rec-text-2">0%</span>
               </div>
-              <div class="progress-bg"><div class="progress-fill" style="width: 10%; background-color: #ab47bc;"></div></div>
+              <div class="progress-bg"><div id="rec-bar-2" class="progress-fill" style="width: 0%; background-color: #ab47bc;"></div></div>
             </div>
             <div style="margin-bottom: 15px;">
               <div style="display: flex; justify-content: space-between; font-size: 14px; margin-bottom: 5px;">
                 <span>🧩 สมองปลอดโปร่ง โฟกัสดีขึ้น (เป้าหมาย 30 วัน)</span>
+                <span id="rec-text-3">0%</span>
               </div>
-              <div class="progress-bg"><div class="progress-fill" style="width: 2%; background-color: #ffa726;"></div></div>
+              <div class="progress-bg"><div id="rec-bar-3" class="progress-fill" style="width: 0%; background-color: #ffa726;"></div></div>
             </div>
           </div>
-
           <div class="card" style="text-align: center;">
             <div class="card-title">🏆 เหรียญตราของคุณ</div>
-            <div style="font-size: 50px; margin: 10px 0;">🌱</div>
-            <div style="color: #00e676; font-weight: 600;">ระดับ: ผู้เริ่มต้น (Apprentice)</div>
+            <div id="rec-badge-icon" style="font-size: 50px; margin: 10px 0;">🌱</div>
+            <div id="rec-badge-text" style="color: #00e676; font-weight: 600;">ระดับ: ผู้เริ่มต้น (Apprentice)</div>
           </div>
         </div>
 
-        <!-- ================= TAB 4: ตั้งค่า (Settings) ================= -->
+        <!-- TAB 4: Settings -->
         <div id="tab-settings" class="tab-content">
           <div class="section-header" style="margin-top: 10px;">การตั้งค่า (SETTINGS)</div>
-          
           <div class="card">
             <div class="card-title">🎯 ตั้งเป้าหมายของคุณ</div>
-            <p style="color: #8e8e93; font-size: 13px;">เป้าหมายที่เล็กลงช่วยให้สำเร็จง่ายขึ้น</p>
-            <select style="width: 100%; padding: 12px; border-radius: 8px; background: #2c2c2e; color: #fff; border: none; margin-bottom: 15px; font-family: 'Kanit';">
+            <p style="color: #8e8e93; font-size: 13px;">เป้าหมายที่เลือกจะไปแสดงที่หลอดความคืบหน้าหน้าแรก</p>
+            <select id="goal-select" onchange="saveGoalSetting()" style="width: 100%; padding: 12px; border-radius: 8px; background: #2c2c2e; color: #fff; border: none; margin-bottom: 15px; font-family: 'Kanit';">
               <option value="1">เป้าหมาย 1 วัน (24 ชั่วโมง)</option>
               <option value="3">เป้าหมาย 3 วัน</option>
               <option value="7">เป้าหมาย 1 สัปดาห์</option>
               <option value="30">เป้าหมาย 1 เดือน</option>
+              <option value="90">เป้าหมาย 3 เดือน</option>
             </select>
           </div>
-
           <div class="card">
             <div class="card-title">📊 ฐานข้อมูลและประวัติ</div>
             <p style="color: #8e8e93; font-size: 13px; margin-bottom: 15px;">ดูประวัติการ Reset ทั้งหมดของคุณใน Google Sheets</p>
-            <button class="action-btn" style="background-color: #0f9d58; color: #fff;" onclick="window.open('https://docs.google.com/spreadsheets/d/1cVlf3U8de-X1wKYVcGMYpBHXT8cyy-OpqIa6VrgnOao/edit')">
-              🟢 เปิดตาราง Google Sheets
-            </button>
+            <button class="action-btn" style="background-color: #0f9d58; color: #fff;" onclick="window.open('https://docs.google.com/spreadsheets/d/1cVlf3U8de-X1wKYVcGMYpBHXT8cyy-OpqIa6VrgnOao/edit')">🟢 เปิดตาราง Google Sheets</button>
           </div>
         </div>
-
       </div>
     </div>
 
-    <!-- ================= BOTTOM NAVIGATION ================= -->
+    <!-- BOTTOM NAVIGATION -->
     <div class="bottom-nav">
-      <div class="nav-item active" id="nav-home" onclick="switchTab('home')">
-        <span class="nav-icon">🏠</span>หน้าหลัก
-      </div>
-      <div class="nav-item" id="nav-quit" onclick="switchTab('quit')">
-        <span class="nav-icon">🛡️</span>เลิกดู
-      </div>
-      <div class="nav-item" id="nav-recovery" onclick="switchTab('recovery')">
-        <span class="nav-icon">💧</span>ฟื้นฟู
-      </div>
-      <div class="nav-item" id="nav-settings" onclick="switchTab('settings')">
-        <span class="nav-icon">⚙️</span>ตั้งค่า
-      </div>
+      <div class="nav-item active" id="nav-home" onclick="switchTab('home')"><span class="nav-icon">🏠</span>หน้าหลัก</div>
+      <div class="nav-item" id="nav-quit" onclick="switchTab('quit')"><span class="nav-icon">🛡️</span>เลิกดู</div>
+      <div class="nav-item" id="nav-recovery" onclick="switchTab('recovery')"><span class="nav-icon">💧</span>ฟื้นฟู</div>
+      <div class="nav-item" id="nav-settings" onclick="switchTab('settings')"><span class="nav-icon">⚙️</span>ตั้งค่า</div>
     </div>
 
-    <!-- ================= JAVASCRIPT ================= -->
     <script>
-      // =======================================================================
-      // อย่าลืม! เอาลิงก์จาก Google Apps Script ที่ลงท้ายด้วย /exec มาใส่อีกครั้ง
-      // =======================================================================
-      const API_URL = "https://script.google.com/macros/s/AKfycbxf_--7colSwGma_c-sfLLrphudSA3NBjrR7-D8s67Esz1yl2N8nhEjZvcpwbVFLkNIVg/exec"; 
+      // ⚠️ ใส่ลิงก์ของคุณที่นี่ ⚠️
+      const API_URL = "https://script.google.com/macros/s/AKfycbzm_jdpiIRk12sGL2vmcmynyOLxysNImo5GA32RY9pgQ4xwikbOdwI_VEBrfInEk3OIXw/exec";
       
       let startTime = 0;
       let timerInterval;
 
-      // ระบบเปลี่ยนหน้า (Tabs)
+      // ระบบ Boot กันโค้ดพัง (Safe Boot)
+      window.addEventListener('DOMContentLoaded', () => {
+        try {
+          // ป้องกัน Safari บล็อก LocalStorage แล้วทำโค้ดพัง
+          let savedGoal = "1";
+          try {
+            savedGoal = localStorage.getItem('userGoal') || "1";
+          } catch(e) { console.log("Storage Blocked"); }
+          
+          let selectGoal = document.getElementById('goal-select');
+          if (selectGoal) selectGoal.value = savedGoal;
+
+          // เริ่มดึงข้อมูลจาก API
+          fetch(API_URL)
+            .then(response => {
+              if(!response.ok) throw new Error("การตอบสนองเครือข่ายผิดปกติ");
+              return response.json();
+            })
+            .then(data => {
+              startTime = data.time;
+              document.getElementById('loading').style.display = 'none';
+              document.getElementById('main-app').style.display = 'block';
+              if(timerInterval) clearInterval(timerInterval);
+              timerInterval = setInterval(updateTimerUI, 1000);
+              updateTimerUI();
+            })
+            .catch(error => {
+              document.getElementById('loading').innerText = "เชื่อมต่อล้มเหลว (ลองกดรีเฟรชหน้าเว็บดูอีกครั้ง): " + error.message;
+              document.getElementById('loading').style.color = "#ff3b30";
+            });
+        } catch (fatalError) {
+          document.getElementById('loading').innerText = "ระบบขัดข้องภายใน: " + fatalError.message;
+          document.getElementById('loading').style.color = "#ff3b30";
+        }
+      });
+
       function switchTab(tabName) {
         document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('active-tab'));
         document.querySelectorAll('.nav-item').forEach(el => el.classList.remove('active'));
-        
         document.getElementById('tab-' + tabName).classList.add('active-tab');
         document.getElementById('nav-' + tabName).classList.add('active');
       }
 
-      // โหลดข้อมูล
-      fetch(API_URL)
-        .then(response => response.json())
-        .then(data => {
-          startTime = data.time;
-          document.getElementById('loading').style.display = 'none';
-          document.getElementById('main-app').style.display = 'block';
-          startTimer();
-        })
-        .catch(error => {
-          document.getElementById('loading').innerText = "เชื่อมต่อฐานข้อมูลล้มเหลว โปรดตรวจสอบลิงก์ API";
-        });
+      function saveGoalSetting() {
+        try {
+          const goalValue = document.getElementById('goal-select').value;
+          localStorage.setItem('userGoal', goalValue);
+          updateTimerUI(); 
+        } catch(e) { alert("ไม่สามารถบันทึกเป้าหมายได้ (อาจเป็นเพราะโหมดส่วนตัวของเบราว์เซอร์)"); }
+      }
 
-      function startTimer() {
-        if(timerInterval) clearInterval(timerInterval);
-        timerInterval = setInterval(updateTimerUI, 1000);
-        updateTimerUI();
+      function randomBrainSwitch() {
+        const activities = [
+          "หยิบแซกโซโฟนมาเป่าไล่สเกลหรือเล่นเพลงโปรด 15 นาที 🎷",
+          "จับกีตาร์ หรือเล่นเครื่องดนตรีชิ้นโปรดเพื่อดึงจังหวะกลับมา 🎸",
+          "ลุกไปดื่มน้ำ 1 แก้วเต็มๆ และวางโครงสร้างงานมูลนิธิของพรุ่งนี้ 📋",
+          "เขียนหรือคิดลอจิกโค้ด Google Apps Script ในหัว 5 นาที 💻",
+          "ฝึกหายใจเข้า 4 วิ กลั้น 4 วิ หายใจออก 6 วิ (ทำซ้ำ 5 รอบ) 🧘‍♂️"
+        ];
+        const randomAct = activities[Math.floor(Math.random() * activities.length)];
+        alert("🚨 ภารกิจด่วนเบี่ยงเบนความสนใจ:\n\n" + randomAct + "\n\nลุกขึ้นไปทำเดี๋ยวนี้เลยครับ!");
       }
 
       function updateTimerUI() {
         if (!startTime) return;
         const now = new Date().getTime();
         let diffSecs = Math.floor((now - startTime) / 1000);
+        let totalCurrentSecs = diffSecs;
 
         const years = Math.floor(diffSecs / (365 * 24 * 3600)); diffSecs %= (365 * 24 * 3600);
         const months = Math.floor(diffSecs / (30 * 24 * 3600)); diffSecs %= (30 * 24 * 3600);
@@ -259,9 +273,53 @@
         else badgeText = `${seconds} วินาที`;
         document.getElementById('badge-display').innerText = badgeText;
 
-        let totalCurrentSecs = Math.floor((now - startTime) / 1000);
-        let percent = (totalCurrentSecs / 86400) * 100;
-        if(percent > 100) percent = 100;
+        // คำนวณเวลาที่ได้คืนมา
+        let savedTotalSecs = totalCurrentSecs / 24; 
+        let savedHrs = Math.floor(savedTotalSecs / 3600);
+        let savedMins = Math.floor((savedTotalSecs % 3600) / 60);
+        let savedDisplay = document.getElementById('time-saved-display');
+        if (savedDisplay) { savedDisplay.innerText = `${savedHrs} ชั่วโมง ${savedMins} นาที`; }
+
+        // อัปเดตหน้าการฟื้นฟู 
+        let percent3Days = Math.min((totalCurrentSecs / (86400 * 3)) * 100, 100);
+        let percent7Days = Math.min((totalCurrentSecs / (86400 * 7)) * 100, 100);
+        let percent30Days = Math.min((totalCurrentSecs / (86400 * 30)) * 100, 100);
+
+        let bar1 = document.getElementById('rec-bar-1'); let text1 = document.getElementById('rec-text-1');
+        if(bar1 && text1) { bar1.style.width = percent3Days + "%"; text1.innerText = percent3Days.toFixed(1) + "%"; }
+
+        let bar2 = document.getElementById('rec-bar-2'); let text2 = document.getElementById('rec-text-2');
+        if(bar2 && text2) { bar2.style.width = percent7Days + "%"; text2.innerText = percent7Days.toFixed(1) + "%"; }
+
+        let bar3 = document.getElementById('rec-bar-3'); let text3 = document.getElementById('rec-text-3');
+        if(bar3 && text3) { bar3.style.width = percent30Days + "%"; text3.innerText = percent30Days.toFixed(1) + "%"; }
+
+        let badgeIcon = document.getElementById('rec-badge-icon');
+        let badgeText = document.getElementById('rec-badge-text');
+        if (badgeIcon && badgeText) {
+            if (totalCurrentSecs >= 86400 * 30) { badgeIcon.innerText = "🧩"; badgeText.innerText = "ระดับ: สมองปลอดโปร่ง (Clear Mind)"; }
+            else if (totalCurrentSecs >= 86400 * 7) { badgeIcon.innerText = "👁️"; badgeText.innerText = "ระดับ: ผู้มีความมั่นใจ (Confident)"; }
+            else if (totalCurrentSecs >= 86400 * 3) { badgeIcon.innerText = "🔋"; badgeText.innerText = "ระดับ: พลังงานเต็มเปี่ยม (Energized)"; }
+            else { badgeIcon.innerText = "🌱"; badgeText.innerText = "ระดับ: ผู้เริ่มต้น (Apprentice)"; }
+        }
+
+        // คำนวณเปอร์เซ็นต์ตามเป้าหมาย (หน้าแรก)
+        let userGoalDays = 1;
+        try { userGoalDays = parseInt(localStorage.getItem('userGoal')) || 1; } catch(e) {}
+        
+        let nextGoalSecs = userGoalDays * 86400;
+        let goalText = `พยายามไปให้ถึง ${userGoalDays} วัน`;
+        let titleText = `ความคืบหน้า (เป้าหมาย ${userGoalDays} วัน)`;
+        
+        if(userGoalDays == 7) { goalText = "พยายามไปให้ถึง 1 สัปดาห์"; titleText = "ความคืบหน้า (เป้าหมาย 1 สัปดาห์)"; }
+        if(userGoalDays == 30) { goalText = "พยายามไปให้ถึง 1 เดือน"; titleText = "ความคืบหน้า (เป้าหมาย 1 เดือน)"; }
+        if(userGoalDays == 90) { goalText = "พยายามไปให้ถึง 3 เดือน"; titleText = "ความคืบหน้า (เป้าหมาย 3 เดือน)"; }
+
+        let percent = Math.min((totalCurrentSecs / nextGoalSecs) * 100, 100);
+        let isGoalReached = (percent >= 100);
+
+        document.getElementById('progress-title').innerText = titleText;
+        document.getElementById('progress-label').innerText = isGoalReached ? "🎉 บรรลุเป้าหมายแล้ว!" : "✔️ " + goalText;
         document.getElementById('progress-percent').innerText = percent.toFixed(2) + "%";
         document.getElementById('progress-fill').style.width = percent + "%";
       }
@@ -269,7 +327,6 @@
       function confirmReset() {
         if(confirm("คุณแน่ใจหรือไม่ว่าต้องการเริ่มนับใหม่? \nสถิติเดิมจะถูกบันทึกไว้ในประวัติ Sheet ของคุณ")) {
           document.getElementById('reset-btn').innerText = "กำลังรีเซ็ตเวลา...";
-          
           fetch(API_URL + "?action=reset")
             .then(response => response.json())
             .then(data => {
