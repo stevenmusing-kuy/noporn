@@ -176,16 +176,15 @@
     </div>
 
     <script>
-      // ⚠️ ใส่ลิงก์ของคุณที่นี่ ⚠️
-      const API_URL = "https://script.google.com/macros/s/AKfycbzm_jdpiIRk12sGL2vmcmynyOLxysNImo5GA32RY9pgQ4xwikbOdwI_VEBrfInEk3OIXw/exec";
+      // ลิงก์ API ของคุณถูกใส่ให้เรียบร้อยแล้ว ไม่ต้องแก้ไขอะไรเลย!
+      const API_URL = "https://script.google.com/macros/s/AKfycbzm_jdpiIRk12sGL2vmcmynyOLxysNImo5GA32RY9pgQ4xwikbOdwI_VEBrfInEk3OIXw/exec"; 
       
       let startTime = 0;
       let timerInterval;
 
-      // ระบบ Boot กันโค้ดพัง (Safe Boot)
+      // ระบบ Boot 
       window.addEventListener('DOMContentLoaded', () => {
         try {
-          // ป้องกัน Safari บล็อก LocalStorage แล้วทำโค้ดพัง
           let savedGoal = "1";
           try {
             savedGoal = localStorage.getItem('userGoal') || "1";
@@ -194,7 +193,6 @@
           let selectGoal = document.getElementById('goal-select');
           if (selectGoal) selectGoal.value = savedGoal;
 
-          // เริ่มดึงข้อมูลจาก API
           fetch(API_URL)
             .then(response => {
               if(!response.ok) throw new Error("การตอบสนองเครือข่ายผิดปกติ");
@@ -230,7 +228,7 @@
           const goalValue = document.getElementById('goal-select').value;
           localStorage.setItem('userGoal', goalValue);
           updateTimerUI(); 
-        } catch(e) { alert("ไม่สามารถบันทึกเป้าหมายได้ (อาจเป็นเพราะโหมดส่วนตัวของเบราว์เซอร์)"); }
+        } catch(e) { alert("ไม่สามารถบันทึกเป้าหมายได้"); }
       }
 
       function randomBrainSwitch() {
@@ -302,32 +300,30 @@
             else if (totalCurrentSecs >= 86400 * 3) { badgeIcon.innerText = "🔋"; recBadgeText.innerText = "ระดับ: พลังงานเต็มเปี่ยม (Energized)"; }
             else { badgeIcon.innerText = "🌱"; recBadgeText.innerText = "ระดับ: ผู้เริ่มต้น (Apprentice)"; }
         }
-        
-        // ================= คำนวณเปอร์เซ็นต์ตามเป้าหมาย (อัปเกรดอัตโนมัติ) =================
+
+        // ================= คำนวณเปอร์เซ็นต์ตามเป้าหมาย (ระบบ Level-up อัตโนมัติ) =================
         let baseGoal = 1;
         try { baseGoal = parseInt(localStorage.getItem('userGoal')) || 1; } catch(e) {}
-
-        // ลำดับด่านเป้าหมาย (วัน) - สามารถเพิ่มด่านได้เองตรงนี้
+        
         const milestones = [1, 3, 7, 30, 90, 180, 365];
-        let currentGoalDays = baseGoal;
         let currentDays = totalCurrentSecs / 86400;
+        let currentGoalDays = baseGoal;
 
-        // ระบบ AI ค้นหาเป้าหมายถัดไปที่ยังทำไม่ถึงให้อัตโนมัติ
         for (let i = 0; i < milestones.length; i++) {
             if (currentDays >= milestones[i]) {
-                continue; // ผ่านด่านนี้แล้ว ให้ไปเช็คด่านต่อไป
+                continue; 
             } else {
-                // อัปเกรดเป้าหมาย (เปรียบเทียบกับค่าที่ตั้งไว้ในหน้าตั้งค่า)
                 currentGoalDays = Math.max(baseGoal, milestones[i]);
                 break;
             }
         }
 
+        if (currentDays >= 365) currentGoalDays = 365;
+
         let nextGoalSecs = currentGoalDays * 86400;
         let goalText = `พยายามไปให้ถึง ${currentGoalDays} วัน`;
         let titleText = `ความคืบหน้า (เป้าหมาย ${currentGoalDays} วัน)`;
         
-        // ปรับข้อความให้ดูมีกำลังใจขึ้นตามระดับความยาก
         if (currentGoalDays == 7) { goalText = "พยายามไปให้ถึง 1 สัปดาห์"; titleText = "ความคืบหน้า (เป้าหมาย 1 สัปดาห์)"; }
         else if (currentGoalDays == 30) { goalText = "พยายามไปให้ถึง 1 เดือน"; titleText = "ความคืบหน้า (เป้าหมาย 1 เดือน)"; }
         else if (currentGoalDays == 90) { goalText = "พยายามไปให้ถึง 3 เดือน"; titleText = "ความคืบหน้า (เป้าหมาย 3 เดือน)"; }
@@ -336,11 +332,10 @@
 
         let percent = (totalCurrentSecs / nextGoalSecs) * 100;
         let isGoalReached = false;
-
-        // ดักไว้เผื่อกรณีที่ทะลุ 1 ปีไปแล้ว
+        
         if (percent >= 100) {
             percent = 100;
-            isGoalReached = true;
+            isGoalReached = (currentDays >= 365); // จะบอกว่าบรรลุสูงสุดก็ต่อเมื่อครบ 1 ปีเท่านั้น
         }
 
         let progressTitle = document.getElementById('progress-title');
@@ -349,7 +344,7 @@
         let progressFill = document.getElementById('progress-fill');
 
         if(progressTitle) progressTitle.innerText = titleText;
-        if(progressLabel) progressLabel.innerText = isGoalReached ? "🎉 บรรลุเป้าหมายสูงสุดแล้ว!" : "✔️ " + goalText;
+        if(progressLabel) progressLabel.innerText = isGoalReached ? "🎉 ทะลุเป้าหมายสูงสุด 1 ปีแล้ว โคตรเก่ง!" : "✔️ " + goalText;
         if(progressPercent) progressPercent.innerText = percent.toFixed(2) + "%";
         if(progressFill) progressFill.style.width = percent + "%";
       }
