@@ -45,9 +45,16 @@
       .nav-icon { font-size: 22px; display: block; margin-bottom: 4px; }
       #loading { text-align: center; margin-top: 50px; color: #00e676; font-size: 18px; padding: 0 20px; word-wrap: break-word; }
       #main-app { display: none; }
+      
+      /* กล่องสีต่างๆ */
       .time-saved-box { background: linear-gradient(135deg, #1e3c72, #2a5298); border-radius: 12px; padding: 15px; text-align: center; margin-top: 15px; box-shadow: 0 4px 10px rgba(0,0,0,0.2); }
       .time-saved-title { font-size: 13px; color: #cfd8dc; font-weight: 600; margin-bottom: 5px; }
       .time-saved-val { font-size: 22px; font-weight: 700; color: #fff; }
+
+      /* กล่องสถิติสูงสุดแบบพรีเมียม */
+      .best-streak-box { background: linear-gradient(135deg, #f6d365 0%, #fda085 100%); border-radius: 12px; padding: 15px; text-align: center; margin-top: 10px; margin-bottom: 10px; box-shadow: 0 4px 15px rgba(253, 160, 133, 0.2); }
+      .best-streak-title { font-size: 13px; color: #5d4037; font-weight: 700; margin-bottom: 5px; text-transform: uppercase; }
+      .best-streak-val { font-size: 22px; font-weight: 700; color: #3e2723; }
     </style>
   </head>
   <body>
@@ -63,6 +70,7 @@
             <div class="main-badge" id="badge-display">0 วินาที</div>
             <div class="subtitle">รักษาสถิติไว้เพื่อฟื้นฟูตัวเองให้สมบูรณ์<br>คุณกำลังทำได้ดีมาก!</div>
           </div>
+          
           <div class="section-header">เวลาปัจจุบัน <div class="red-dot"></div></div>
           <div class="timer-grid">
             <div class="time-box"><div class="time-val" id="t-year">0</div><div class="time-label">ปี</div></div>
@@ -72,10 +80,18 @@
             <div class="time-box"><div class="time-val" id="t-minute">0</div><div class="time-label">นาที</div></div>
             <div class="time-box"><div class="time-val" id="t-second">0</div><div class="time-label">วินาที</div></div>
           </div>
+          
           <div class="time-saved-box">
             <div class="time-saved-title">⏱️ เวลาชีวิตที่ได้กลับคืนมา (คำนวณวันละ 1 ชม.)</div>
             <div class="time-saved-val" id="time-saved-display">0 ชั่วโมง 0 นาที</div>
           </div>
+
+          <!-- ================= กล่องสถิติสูงสุด ================= -->
+          <div class="best-streak-box">
+            <div class="best-streak-title">🏆 สถิติสูงสุดที่คุณทำได้ (All-Time Best)</div>
+            <div class="best-streak-val" id="max-streak-display">0 วินาที</div>
+          </div>
+
           <div class="section-header" id="progress-title">ความคืบหน้า (เป้าหมายปัจจุบัน)</div>
           <div class="progress-card">
             <div class="progress-text">
@@ -149,7 +165,7 @@
           <div class="section-header" style="margin-top: 10px;">การตั้งค่า (SETTINGS)</div>
           <div class="card">
             <div class="card-title">🎯 ตั้งเป้าหมายของคุณ</div>
-            <p style="color: #8e8e93; font-size: 13px;">เป้าหมายที่เลือกจะไปแสดงที่หลอดความคืบหน้าหน้าแรก</p>
+            <p style="color: #8e8e93; font-size: 13px;">เป้าหมายที่เลือกจะเป็นจุดเริ่มต้น และระบบจะอัปเลเวลให้เรื่อยๆ ตามความคืบหน้า</p>
             <select id="goal-select" onchange="saveGoalSetting()" style="width: 100%; padding: 12px; border-radius: 8px; background: #2c2c2e; color: #fff; border: none; margin-bottom: 15px; font-family: 'Kanit';">
               <option value="1">เป้าหมาย 1 วัน (24 ชั่วโมง)</option>
               <option value="3">เป้าหมาย 3 วัน</option>
@@ -176,7 +192,7 @@
     </div>
 
     <script>
-      // ลิงก์ API ของคุณถูกใส่ให้เรียบร้อยแล้ว ไม่ต้องแก้ไขอะไรเลย!
+      // ลิงก์ API ตัวจริงของคุณ
       const API_URL = "https://script.google.com/macros/s/AKfycbzm_jdpiIRk12sGL2vmcmynyOLxysNImo5GA32RY9pgQ4xwikbOdwI_VEBrfInEk3OIXw/exec"; 
       
       let startTime = 0;
@@ -278,6 +294,36 @@
         let savedDisplay = document.getElementById('time-saved-display');
         if (savedDisplay) { savedDisplay.innerText = `${savedHrs} ชั่วโมง ${savedMins} นาที`; }
 
+        // ================= สถิติสูงสุด (All-Time Best) =================
+        let maxStreakSecs = 0;
+        try {
+            maxStreakSecs = parseInt(localStorage.getItem('maxStreakSecs')) || 0;
+            // ถ้าเวลาปัจจุบันมากกว่าสถิติเดิม ให้อัปเดตสถิติใหม่
+            if (totalCurrentSecs > maxStreakSecs) {
+                maxStreakSecs = totalCurrentSecs;
+                localStorage.setItem('maxStreakSecs', maxStreakSecs);
+            }
+        } catch(e) {}
+
+        // แปลงสถิติสูงสุดจากวินาทีเป็น ปี/เดือน/วัน/ชม/นาที
+        let remMax = maxStreakSecs;
+        const mYears = Math.floor(remMax / (365 * 24 * 3600)); remMax %= (365 * 24 * 3600);
+        const mMonths = Math.floor(remMax / (30 * 24 * 3600)); remMax %= (30 * 24 * 3600);
+        const mDays = Math.floor(remMax / (24 * 3600)); remMax %= (24 * 3600);
+        const mHours = Math.floor(remMax / 3600); remMax %= 3600;
+        const mMins = Math.floor(remMax / 60); const mSecs = remMax % 60;
+
+        let maxText = "";
+        if (mYears > 0) maxText = `${mYears} ปี ${mMonths} เดือน`;
+        else if (mMonths > 0) maxText = `${mMonths} เดือน ${mDays} วัน`;
+        else if (mDays > 0) maxText = `${mDays} วัน ${mHours} ชั่วโมง`;
+        else if (mHours > 0) maxText = `${mHours} ชั่วโมง ${mMins} นาที`;
+        else if (mMins > 0) maxText = `${mMins} นาที ${mSecs} วินาที`;
+        else maxText = `${mSecs} วินาที`;
+
+        let maxDisplay = document.getElementById('max-streak-display');
+        if (maxDisplay) maxDisplay.innerText = maxText;
+
         // อัปเดตหน้าการฟื้นฟู 
         let percent3Days = Math.min((totalCurrentSecs / (86400 * 3)) * 100, 100);
         let percent7Days = Math.min((totalCurrentSecs / (86400 * 7)) * 100, 100);
@@ -335,7 +381,7 @@
         
         if (percent >= 100) {
             percent = 100;
-            isGoalReached = (currentDays >= 365); // จะบอกว่าบรรลุสูงสุดก็ต่อเมื่อครบ 1 ปีเท่านั้น
+            isGoalReached = (currentDays >= 365); 
         }
 
         let progressTitle = document.getElementById('progress-title');
@@ -357,7 +403,7 @@
             .then(data => {
               startTime = data.time;
               document.getElementById('reset-btn').innerText = "🚨 ฉันพลาดแล้ว (เริ่มนับใหม่)";
-              alert("เวลาถูกรีเซ็ตแล้ว เริ่มต้นกันใหม่นะครับ เป็นกำลังใจให้!");
+              alert("เวลาถูกรีเซ็ตแล้ว เริ่มต้นกันใหม่นะครับ สถิติสูงสุดของคุณจะยังถูกเก็บไว้เป็นเป้าหมายให้ทำลาย!");
               updateTimerUI(); 
             });
         }
